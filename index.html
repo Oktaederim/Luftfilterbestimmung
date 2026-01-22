@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Filterklassen-Rechner (EN 779 ↔ ISO 16890 + HEPA)</title>
+  <meta name="description" content="Praxis-Rechner zur indikative Zuordnung von Filterklassen nach EN 779 und ISO 16890 sowie Überblick zu EPA/HEPA/ULPA nach EN 1822." />
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+  <style>
+    :root { --bg:#0b1020; --card:#121a33; --muted:#a9b3d6; --text:#eef2ff; --line:#243055; --accent:#7aa2ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:linear-gradient(180deg, #070a14, var(--bg)); color:var(--text); }
+    a { color: var(--accent); }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 18px; }
+    .title { display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+    h1 { margin: 8px 0 4px; font-size: 22px; }
+    .sub { margin: 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+    .grid { display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 14px; margin-top: 14px; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+    .card { background: rgba(255,255,255,0.03); border:1px solid var(--line); border-radius: 14px; padding: 14px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 600px){ .row{ grid-template-columns: 1fr; } }
+    label { display:block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+    select, input { width:100%; padding: 10px 10px; border-radius: 10px; border:1px solid var(--line); background:#0a0f24; color:var(--text); outline:none; }
+    .pill { display:inline-flex; gap:8px; align-items:center; padding: 6px 10px; border:1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.03); color: var(--muted); font-size: 12px; }
+    .kpi { display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; }
+    .hr { height:1px; background: var(--line); margin: 12px 0; border:0; }
+    .h2 { margin: 0 0 8px; font-size: 15px; }
+    .list { margin: 0; padding-left: 18px; color: var(--muted); }
+    .note { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .ok { color:#b7ffda; }
+    .warn { color:#ffd48a; }
+    .bad { color:#ffb0b0; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .table { width:100%; border-collapse: collapse; overflow:hidden; border-radius: 12px; border:1px solid var(--line); }
+    .table th, .table td { padding: 8px 10px; border-bottom:1px solid var(--line); vertical-align: top; font-size: 13px; }
+    .table th { text-align:left; color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.03); }
+    .footer { margin-top: 14px; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="title">
+    <div>
+      <h1>Filterklassen-Rechner: <span class="mono">EN 779</span> ↔ <span class="mono">ISO 16890</span> + <span class="mono">EN 1822</span> (HEPA)</h1>
+      <p class="sub">
+        Praktische Hilfe für Monteure/Techniker: Eingabe einer Filterklasse und Anzeige der typischen Einordnung, Einsatzhinweise und einer <b>indikative</b> Zuordnung
+        (keine 1:1-Umrechnung, weil Prüfmethodik/Staub unterschiedlich).
+      </p>
+    </div>
+    <div class="kpi">
+      <span class="pill"><span class="ok">●</span> Offline nutzbar (statische Seite)</span>
+      <span class="pill"><span class="warn">●</span> Zuordnung nur richtungsweisend</span>
+    </div>
+  </div>
+
+  <div id="app"></div>
+
+  <div class="footer">
+    <p>
+      Fachhinweis: ISO 16890 bewertet Fraktionen <span class="mono">PM1 / PM2,5 / PM10</span> als Mittelwerte (ePM) – EN 779 ist abgekündigt, wird aber in Bestandsanlagen noch oft referenziert.
+      Für exakte Auswahl gilt: Datenblatt/Prüfbericht des konkreten Filters und Anlagenanforderung (Hygiene, Außenluft, Prozess).
+    </p>
+  </div>
+</div>
+
+<script type="text/babel">
+const { useMemo, useState } = React;
+
+/**
+ * Datenbasis:
+ * - Eurovent 4/23 zeigt Überlappungsbereiche zwischen EN 779 Klassen und ISO 16890 ePM-Fraktionen (M5..F9) (indikativ).
+ * - Grobklassen (G1..G4) -> ISO Coarse sind branchenüblich nur grob zugeordnet.
+ *
+ * WICHTIG: Das ist bewusst "praktisch & sicher" umgesetzt: Das Tool behauptet keine exakte Umrechnung,
+ * sondern zeigt: (a) was ePM1 60% bedeutet, (b) welche EN 779 Klassen typischerweise in Frage kommen, (c) kurze Anwendungshinweise.
+ */
+
+const EN779 = [
+  {
+    id: "G1", label: "G1", family: "Grobfilter (alt)",
+    notes: ["Sehr grobe Vorfiltration (historisch). In der Praxis meist durch G4/ISO Coarse ersetzt."],
+    isoHint: [{ kind:"Coarse", range:[20, 40], text:"indikativ ISO Coarse (sehr grob)"}]
+  },
+  {
+    id: "G2", label: "G2", family: "Grobfilter (alt)",
+    notes: ["Grobe Vorfiltration (historisch)."],
+    isoHint: [{ kind:"Coarse", range:[30, 50], text:"indikativ ISO Coarse"}]
+  },
+  {
+    id: "G3", label: "G3", family: "Grobfilter (alt)",
+    notes: ["Vorfilterstufe, schützt nachgeschaltete Feinfilter, verlängert Standzeit."],
+    isoHint: [{ kind:"Coarse", range:[45, 65], text:"indikativ ISO Coarse"}]
+  },
+  {
+    id: "G4", label: "G4", family: "Grobfilter (Bestand)",
+    notes: [
+      "Typischer Vorfilter in RLT-Anlagen (Schutz der Komponenten/Feinfilter).",
+      "Bei staubiger Außenluft oder Baustellenbetrieb häufig sinnvoll."
+    ],
+    isoHint: [{ kind:"Coarse", range:[60, 85], text:"indikativ ISO Coarse (häufige Bestands-Zuordnung)"}]
+  },
+  // M5..F9: Bereiche nach Eurovent (indicative overlapping)
+  {
+    id: "M5", label: "M5 (ehem. F5)", family: "Mittelfilter",
+    eurovent: { ePM1:[5,35], ePM25:[10,45], ePM10:[40,70] },
+    notes: [
+      "Mittlere Abscheidung – häufig als 1. Feinfilterstufe / Schutzfilter.",
+      "Typisch bei zweistufiger Filterung (Vorfilter + Feinfilter)."
+    ],
+  },
+  {
+    id: "M6", label: "M6 (ehem. F6)", family: "Mittelfilter",
+    eurovent: { ePM1:[10,40], ePM25:[20,50], ePM10:[60,80] },
+    notes: [
+      "Mittlere Abscheidung – je nach Auslegung als Feinfilter-Vorstufe.",
+      "Kann bei 1-stufiger Filtration in wenig kritischen Bereichen vorkommen."
+    ],
+  },
+  {
+    id: "F7", label: "F7", family: "Feinfilter",
+    eurovent: { ePM1:[40,65], ePM25:[65,75], ePM10:[80,90] },
+    notes: [
+      "Typischer Feinfilter für Zuluft (Büros, Labore allgemein, Schulen – abhängig von Anforderung).",
+      "Häufige Praxisfrage: ePM1 60% liegt typischerweise im F7-Überlappungsbereich."
+    ],
+  },
+  {
+    id: "F8", label: "F8", family: "Feinfilter (hoch)",
+    eurovent: { ePM1:[65,90], ePM25:[75,95], ePM10:[90,100] },
+    notes: [
+      "Höhere Feinabscheidung – geeignet bei höherem Schutzbedarf / höherer Außenluftbelastung.",
+      "Oft als zweite Stufe oder als hochwertige 1-Stufe, wenn Druckverlust/Anlage passt."
+    ],
+  },
+  {
+    id: "F9", label: "F9", family: "Feinfilter (sehr hoch)",
+    eurovent: { ePM1:[80,90], ePM25:[85,95], ePM10:[90,100] },
+    notes: [
+      "Sehr hohe Feinabscheidung (vor HEPA/Endfiltern oder bei anspruchsvoller Zuluft).",
+      "In der Praxis oft in Kombinationen (Vorfilter + F9) zur Standzeitoptimierung."
+    ],
+  },
+];
+
+const ISO16890 = [
+  { id:"ePM1", label:"ISO ePM1", desc:"Feinstaub-Fraktion ≤ 1 µm (kritisch: Verbrennungsrauch, sehr feine Partikel)." },
+  { id:"ePM25", label:"ISO ePM2,5", desc:"Feinstaub-Fraktion ≤ 2,5 µm (z. B. Ruß/Feinstaub, viele Bakterienträgerpartikel)." },
+  { id:"ePM10", label:"ISO ePM10", desc:"Fraktion ≤ 10 µm (z. B. Pollen, gröbere Stäube)." },
+  { id:"Coarse", label:"ISO Coarse", desc:"Grobe Partikel > 10 µm (Vorfilter/Anlagenschutz, Standzeitverlängerung)." },
+];
+
+// EN 1822 Überblick (EPA/HEPA/ULPA); Werte hier als Kurzinfo (keine Leckage-/Scan-Details).
+const EN1822 = [
+  { id:"E10", label:"E10 (EPA)", eff:"≥ 85% (MPPS)", use:"Schutz-/Vorstufe vor HEPA, z. B. Technikbereiche." },
+  { id:"E11", label:"E11 (EPA)", eff:"≥ 95% (MPPS)", use:"Fein-Endstufe, häufig vor H13/H14." },
+  { id:"E12", label:"E12 (EPA)", eff:"≥ 99,5% (MPPS)", use:"Hochwirksame Vorstufe, Prozess-/Hygiene-Anwendungen." },
+  { id:"H13", label:"H13 (HEPA)", eff:"≥ 99,95% (MPPS)", use:"Krankenhaus/Pharma/Labor je nach Konzept; typische HEPA-Klasse." },
+  { id:"H14", label:"H14 (HEPA)", eff:"≥ 99,995% (MPPS)", use:"Sehr hohe Anforderungen (z. B. kritische Bereiche, Reinraumkonzepte)." },
+  { id:"U15", label:"U15 (ULPA)", eff:"≥ 99,9995% (MPPS)", use:"Reinraum/High-End-Prozess." },
+  { id:"U16", label:"U16 (ULPA)", eff:"≥ 99,99995% (MPPS)", use:"Reinraum/High-End-Prozess." },
+  { id:"U17", label:"U17 (ULPA)", eff:"≥ 99,999995% (MPPS)", use:"Reinraum/High-End-Prozess." },
+];
+
+// Hilfsfunktionen
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const round5 = (v) => Math.round(v / 5) * 5;
+
+function isoLabel(fractionId, percent){
+  const p = clamp(Number(percent || 0), 0, 100);
+  if (fractionId === "Coarse") return `ISO Coarse ${Math.round(p)}%`;
+  // ISO 16890 klassiert i.d.R. ab 50% in 5%-Schritten. Wir zeigen beides: exakt eingegeben + normtypisch gerundet.
+  const normP = clamp(round5(p), 0, 100);
+  const normOk = normP >= 50;
+  const fracName = fractionId === "ePM25" ? "ePM2,5" : fractionId;
+  return `${fracName} ${Math.round(p)}%` + (normOk ? ` (typisch als ${fracName} ${normP}%)` : ` (unter 50% → meist ISO Coarse / keine ePM-Klasse)`);
+}
+
+function matchesEn779ByIso(fractionId, percent){
+  const p = clamp(Number(percent || 0), 0, 100);
+  const hits = [];
+
+  for (const c of EN779){
+    if (!c.eurovent) continue;
+    let r = null;
+    if (fractionId === "ePM1") r = c.eurovent.ePM1;
+    if (fractionId === "ePM25") r = c.eurovent.ePM25;
+    if (fractionId === "ePM10") r = c.eurovent.ePM10;
+    if (!r) continue;
+
+    // Überlappung: wenn p im Bereich liegt -> Kandidat
+    if (p >= r[0] && p <= r[1]) hits.push({ cls:c, range:r });
+  }
+
+  // Grob: Coarse -> G-Klassen als Hinweis
+  if (fractionId === "Coarse"){
+    for (const c of EN779){
+      if (!c.isoHint) continue;
+      for (const h of c.isoHint){
+        if (p >= h.range[0] && p <= h.range[1]) hits.push({ cls:c, range:h.range, hint:h.text });
+      }
+    }
+  }
+
+  return hits;
+}
+
+function App(){
+  const [mode, setMode] = useState("iso"); // iso | en779 | hepa
+  const [isoFrac, setIsoFrac] = useState("ePM1");
+  const [isoPct, setIsoPct] = useState(60);
+
+  const [en779Sel, setEn779Sel] = useState("F7");
+  const [hepaSel, setHepaSel] = useState("H13");
+
+  const isoOut = useMemo(() => {
+    const hits = matchesEn779ByIso(isoFrac, isoPct);
+    // sort: Feinfilter zuerst
+    const prio = (id) => (id.startsWith("F") ? 0 : id.startsWith("M") ? 1 : id.startsWith("G") ? 2 : 9);
+    hits.sort((a,b) => prio(a.cls.id) - prio(b.cls.id));
+    return hits;
+  }, [isoFrac, isoPct]);
+
+  const enOut = useMemo(() => EN779.find(x => x.id === en779Sel), [en779Sel]);
+  const hepaOut = useMemo(() => EN1822.find(x => x.id === hepaSel), [hepaSel]);
+
+  return (
+    <div className="grid">
+      <div className="card">
+        <div className="row">
+          <div>
+            <label>Modus</label>
+            <select value={mode} onChange={e=>setMode(e.target.value)}>
+              <option value="iso">ISO 16890 → EN 779 (indikativ)</option>
+              <option value="en779">EN 779 → ISO 16890 (Bereiche anzeigen)</option>
+              <option value="hepa">EPA/HEPA/ULPA (EN 1822 Überblick)</option>
+            </select>
+          </div>
+          <div>
+            <label>Typische Frage</label>
+            <div className="pill">
+              <span className="mono">ePM1/60%</span> = „Filter hält im Mittel ca. <b>60%</b> der <b>PM1-Fraktion</b> zurück“
+            </div>
+          </div>
+        </div>
+
+        <hr className="hr" />
+
+        {mode === "iso" && (
+          <>
+            <div className="row">
+              <div>
+                <label>ISO 16890 Fraktion</label>
+                <select value={isoFrac} onChange={e=>setIsoFrac(e.target.value)}>
+                  {ISO16890.map(x => <option key={x.id} value={x.id}>{x.label}</option>)}
+                </select>
+                <p className="note" style={{marginTop:8}}>
+                  {ISO16890.find(x=>x.id===isoFrac)?.desc}
+                </p>
+              </div>
+              <div>
+                <label>Abscheidegrad [%]</label>
+                <input type="number" min="0" max="100" value={isoPct} onChange={e=>setIsoPct(e.target.value)} />
+                <p className="note" style={{marginTop:8}}>
+                  Anzeige: <span className="mono">{isoLabel(isoFrac, isoPct)}</span>
+                </p>
+              </div>
+            </div>
+
+            <hr className="hr" />
+
+            <h3 className="h2">Ergebnis: indikative EN 779-Kandidaten</h3>
+            {isoOut.length === 0 ? (
+              <p className="note">
+                Keine eindeutige Zuordnung aus den Überlappungsbereichen.
+                Hinweis: Unter 50% bei ePM-Fraktionen ist häufig eher ISO Coarse bzw. kein ePM-Klassenlabel.
+              </p>
+            ) : (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>EN 779 Klasse</th>
+                    <th>Überlappungsbereich</th>
+                    <th>Praxisnotiz</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isoOut.map((h, i) => (
+                    <tr key={i}>
+                      <td><b>{h.cls.label}</b><div className="note">{h.cls.family || ""}</div></td>
+                      <td className="mono">{h.hint ? h.hint : `${isoFrac === "ePM25" ? "ePM2,5" : isoFrac} ${h.range[0]}–${h.range[1]}%`}</td>
+                      <td>
+                        <ul className="list">
+                          {(h.cls.notes || []).slice(0,2).map((n, j) => <li key={j}>{n}</li>)}
+                        </ul>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <p className="note" style={{marginTop:10}}>
+              <span className="warn">Wichtig:</span> Das ist eine <b>Richtwert-Zuordnung</b> (Überlappungsbereiche). Für Austausch/Bestellung: Datenblatt des konkreten Filters
+              (ePM-Werte für alle Fraktionen, Druckverlust, Staubspeicherfähigkeit) und Anlagenanforderung.
+            </p>
+          </>
+        )}
+
+        {mode === "en779" && (
+          <>
+            <div className="row">
+              <div>
+                <label>EN 779 Klasse</label>
+                <select value={en779Sel} onChange={e=>setEn779Sel(e.target.value)}>
+                  {EN779.map(x => <option key={x.id} value={x.id}>{x.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label>Einordnung</label>
+                <div className="pill">
+                  <b>{enOut?.family || "—"}</b>
+                  <span>•</span>
+                  <span className="mono">{enOut?.id}</span>
+                </div>
+              </div>
+            </div>
+
+            <hr className="hr" />
+
+            <h3 className="h2">Typische ISO 16890-Bereiche (indikativ)</h3>
+            {!enOut?.eurovent && !enOut?.isoHint ? (
+              <p className="note">Für diese Klasse sind hier nur allgemeine Hinweise hinterlegt.</p>
+            ) : (
+              <>
+                {enOut?.eurovent && (
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Fraktion</th>
+                        <th>Bereich</th>
+                        <th>Was bedeutet das praktisch?</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="mono">ePM1</td>
+                        <td className="mono">{enOut.eurovent.ePM1[0]}–{enOut.eurovent.ePM1[1]}%</td>
+                        <td className="note">Feinste Partikel (PM1) – wichtig für Raumluftqualität.</td>
+                      </tr>
+                      <tr>
+                        <td className="mono">ePM2,5</td>
+                        <td className="mono">{enOut.eurovent.ePM25[0]}–{enOut.eurovent.ePM25[1]}%</td>
+                        <td className="note">Feinstaub (PM2,5) – gesundheitlich relevant, städtische Außenluft.</td>
+                      </tr>
+                      <tr>
+                        <td className="mono">ePM10</td>
+                        <td className="mono">{enOut.eurovent.ePM10[0]}–{enOut.eurovent.ePM10[1]}%</td>
+                        <td className="note">Pollen/Staub – typisch für Schutz der Anlage und Grund-Zuluftqualität.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
+
+                {enOut?.isoHint && (
+                  <ul className="list">
+                    {enOut.isoHint.map((h,i)=><li key={i}><span className="mono">{h.text}</span></li>)}
+                  </ul>
+                )}
+              </>
+            )}
+
+            <hr className="hr" />
+
+            <h3 className="h2">Einsatzhinweise</h3>
+            <ul className="list">
+              {(enOut?.notes || []).map((n,i)=><li key={i}>{n}</li>)}
+              <li>Bei zweistufiger Filtration: Vorfilter (ISO Coarse/G4) schützt Feinfilter und erhöht die Standzeit.</li>
+              <li>Beachte Druckverlust/EC-Ventilatorleistung: „besserer“ Filter kann deutlich mehr Energie kosten (Auslegung prüfen).</li>
+            </ul>
+          </>
+        )}
+
+        {mode === "hepa" && (
+          <>
+            <div className="row">
+              <div>
+                <label>Klasse nach EN 1822</label>
+                <select value={hepaSel} onChange={e=>setHepaSel(e.target.value)}>
+                  {EN1822.map(x => <option key={x.id} value={x.id}>{x.label}</option>)}
+                </select>
+              </div>
+              <div>
+                <label>Hinweis</label>
+                <div className="pill">
+                  <span className="mono">EN 1822</span>
+                  <span>•</span>
+                  <span>Bewertung bei <b>MPPS</b> + Leckageprüfung (Herstellerangaben beachten)</span>
+                </div>
+              </div>
+            </div>
+
+            <hr className="hr" />
+
+            <h3 className="h2">Ausgewählte Klasse</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Klasse</th>
+                  <th>Mindestwirkungsgrad</th>
+                  <th>Typischer Einsatz</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>{hepaOut.label}</b></td>
+                  <td className="mono">{hepaOut.eff}</td>
+                  <td className="note">{hepaOut.use}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p className="note" style={{marginTop:10}}>
+              Praxis: HEPA/ULPA sind üblicherweise <b>Endfilter</b> (z. B. in Deckenfeldern, Gehäusen oder Reinraum-AHUs) und brauchen
+              saubere Vorstufen (Coarse/F-Stufe), sonst sinkt die Standzeit massiv.
+              ISO 29463 ist ein international verwandter Standard zu EN 1822 (Begriffe/Zuordnung im Datenblatt prüfen).
+            </p>
+          </>
+        )}
+      </div>
+
+      <div className="card">
+        <h3 className="h2">Schnell-Erklärungen</h3>
+        <ul className="list">
+          <li><b className="mono">ePM1 60%</b>: Im ISO-Test werden Partikel im Bereich „PM1“ bewertet; der Filter erreicht im Mittel ca. 60% Abscheidung dieser Fraktion.</li>
+          <li><b>EN 779</b> ist abgekündigt, taucht aber in Bestandsunterlagen auf. ISO 16890 ist die aktuelle Klassifikation.</li>
+          <li><b>Keine 1:1-Umrechnung</b>: Nur Überlappungen/Erfahrungswerte – entscheidend ist der konkrete Filtertyp und das Datenblatt.</li>
+          <li><b>HEPA (EN 1822)</b> ist eine andere Welt: MPPS-Bewertung und Leckageprüfung, typischer Endfilter in Hygiene/Reinraum-Konzepten.</li>
+        </ul>
+
+        <hr className="hr" />
+
+        <h3 className="h2">Typische Filterstufen (Praxis)</h3>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Stufe</th>
+              <th>Typisch</th>
+              <th>Zweck</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vorfilter</td>
+              <td className="mono">ISO Coarse / (Bestand: G4)</td>
+              <td className="note">Schutz von Registern/Ventilatoren, Standzeit der Feinfilter erhöhen</td>
+            </tr>
+            <tr>
+              <td>Feinfilter</td>
+              <td className="mono">ePM1 50–80% (häufig)</td>
+              <td className="note">Raumluftqualität, Feinstaubreduktion</td>
+            </tr>
+            <tr>
+              <td>Endfilter</td>
+              <td className="mono">H13/H14</td>
+              <td className="note">Hygiene-/Prozessanforderungen, Reinraum-/Labor-/Klinikbereiche je nach Konzept</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr className="hr" />
+
+        <h3 className="h2">Haftung / Qualitätssicherung</h3>
+        <p className="note">
+          Dieses Tool ist als <b>Hilfsmittel</b> gedacht. Für Ausschreibung/Bestellung/Abnahme gelten:
+          Herstellerdatenblatt, Normprüfung des konkreten Produkts, Anlagenanforderung (z. B. Hygiene, Druckverlust, Volumenstrom, Filterstufenaufbau).
+        </p>
+
+        <hr className="hr" />
+
+        <h3 className="h2">Optional (Ausbauidee)</h3>
+        <ul className="list">
+          <li>„Filterstufen-Planer“: Vorfilter + Feinfilter kombinieren und kumulierte ePM-Effizienz grob abschätzen (mit Hinweis: exakte Berechnung komplexer).</li>
+          <li>„Druckverlust-Notiz“: Felder für Anfangsdruckverlust/Enddruckverlust zur Wartungsplanung.</li>
+          <li>MERV/ASHRAE-Info als eigener Tab (ohne harte Umrechnung, nur Erklärung).</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<App />);
+</script>
+</body>
+</html>
