@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Filterklassen-Vergleich | ISO 16890 • EN 779 • EN 1822 • MERV</title>
+  <title>Filterklassen – Vergleich & Montagehilfe (Praxis)</title>
   <style>
     :root{
       --bg0:#070a12; --bg1:#0c1222; --card:rgba(255,255,255,.06);
       --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.18);
       --text:#eef2ff; --muted:#a9b3d6; --muted2:#8a95bb;
-      --accent:#7aa2ff; --ok:#b7ffda; --warn:#ffd48a;
+      --accent:#7aa2ff; --ok:#b7ffda; --warn:#ffd48a; --bad:#ff9aa6;
       --shadow: 0 10px 35px rgba(0,0,0,.35);
       --radius:18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -25,8 +25,7 @@
     .wrap{ max-width:1200px; margin:0 auto; padding:22px; }
     header{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:14px; }
     h1{ margin:0 0 6px; font-size:20px; letter-spacing:.2px; }
-    p{ margin:0; }
-    .sub{ color:var(--muted); font-size:13px; line-height:1.45; max-width:880px; }
+    .sub{ color:var(--muted); font-size:13px; line-height:1.45; max-width:980px; }
     .pillrow{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .pill{
       display:inline-flex; gap:8px; align-items:center;
@@ -47,9 +46,38 @@
       padding:14px;
     }
     .card h2{ margin:0 0 10px; font-size:14px; }
+
+    .section{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      background: rgba(255,255,255,.035);
+    }
+    .section + .section{ margin-top:12px; }
+
+    .sectionHead{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .step{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:4px 10px; border-radius:999px;
+      border:1px solid rgba(122,162,255,.35);
+      background: rgba(122,162,255,.10);
+      color: var(--text);
+      font-size: 12px;
+      width: fit-content;
+    }
+    .step2{ border-color: rgba(183,255,218,.28); background: rgba(183,255,218,.07); }
+    .step3{ border-color: rgba(255,212,138,.28); background: rgba(255,212,138,.07); }
+
+    .sectionTitle{ font-weight:700; }
+    .sectionDesc{ color:var(--muted); font-size:12px; line-height:1.35; }
+
     .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     @media (max-width: 680px){ .row{ grid-template-columns:1fr; } }
     label{ display:block; font-size:12px; color:var(--muted); margin:0 0 6px; }
+
     select,input,button{
       width:100%; padding:11px 11px; border-radius:14px;
       border:1px solid var(--line2); background:rgba(10,15,36,.85);
@@ -57,6 +85,7 @@
     }
     input::placeholder{ color:rgba(169,179,214,.65); }
     select:focus,input:focus{ border-color: rgba(122,162,255,.55); box-shadow: 0 0 0 4px rgba(122,162,255,.12); }
+
     button{ cursor:pointer; }
     .btn{
       background:linear-gradient(180deg, rgba(122,162,255,.22), rgba(122,162,255,.10));
@@ -72,8 +101,6 @@
     }
     .btn:hover, .btn2:hover, .btnGhost:hover{ filter:brightness(1.07); }
 
-    .hr{ height:1px; background:var(--line); margin:12px 0; border:0; }
-
     .hint{
       font-size:12px; color:var(--muted); line-height:1.45;
       background:rgba(255,255,255,.03);
@@ -85,13 +112,14 @@
     .mini{ font-size:11px; color:var(--muted2); margin-top:6px; line-height:1.35; }
 
     .resultGrid{ display:grid; grid-template-columns: 1fr; gap:10px; }
+
     .rCard{
       border:1px solid var(--line);
       border-radius:16px;
       padding:12px;
       background:rgba(255,255,255,.04);
     }
-    .rTop{ display:flex; justify-content:space-between; gap:10px; }
+    .rTop{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
     .badge{
       font-size:11px; padding:4px 8px; border-radius:999px;
       border:1px solid var(--line); color:var(--muted);
@@ -99,7 +127,46 @@
       white-space:nowrap; height: fit-content;
     }
     .bigMono{ font-family:var(--mono); font-size:16px; letter-spacing:.2px; }
-    .rBody ul{ margin:0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.45; }
+
+    /* Ampel + Einsatzblock */
+    .metaRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+    .ampel{
+      display:flex; gap:6px; align-items:center;
+      padding:6px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      font-size: 12px; color: var(--muted); width: fit-content;
+    }
+    .lamp{ width:10px; height:10px; border-radius:50%; background:#666; }
+    .lamp.g{ background: var(--ok); }
+    .lamp.y{ background: var(--warn); }
+    .lamp.r{ background: var(--bad); }
+
+    .useBlock{
+      margin-top:10px; padding:10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.025);
+    }
+    .useTitle{ font-size:12px; color:var(--muted2); margin:0 0 6px; }
+    .useText{ font-size:13px; margin:0; color: var(--text); }
+    .useHint{ font-size:12px; margin-top:8px; color: var(--muted); line-height:1.45; }
+
+    /* Ampel-Legende */
+    .legend{
+      display:grid; grid-template-columns: 1fr; gap:8px;
+      margin: 10px 0 0;
+    }
+    .legend .item{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.025);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .legend .b{ font-weight:700; color:var(--text); }
 
     .footer{ margin-top:14px; font-size:12px; color:var(--muted); }
     .warnText{ color:var(--warn); }
@@ -107,13 +174,14 @@
     /* Print */
     @media print{
       body{ background:#fff !important; color:#111 !important; }
-      header, #leftPanel, #actionRow, #presetPanel { display:none !important; }
+      header, #leftPanel, #actionRow, #exampleBlock, #mountBlock, #legendBlock { display:none !important; }
       .wrap{ max-width:none; padding:0; }
       .grid{ grid-template-columns: 1fr !important; }
       .card{ background:#fff !important; border:1px solid #ddd !important; box-shadow:none !important; }
       .rCard{ background:#fff !important; border:1px solid #ddd !important; }
       .hint{ background:#fafafa !important; border:1px dashed #bbb !important; color:#333 !important; }
-      .badge{ border:1px solid #ccc !important; color:#333 !important; background:#fafafa !important; }
+      .badge, .ampel{ border:1px solid #ccc !important; color:#333 !important; background:#fafafa !important; }
+      .useBlock{ border:1px solid #ddd !important; background:#fafafa !important; }
       .warnText, .footer{ color:#333 !important; }
       #printHeader{ display:block !important; }
     }
@@ -129,19 +197,20 @@
     #printHeader .s{ font-size:12px; color:var(--muted); margin-top:4px; }
   </style>
 </head>
+
 <body>
 <div class="wrap">
   <header>
     <div>
-      <h1>Filterklassen-Vergleich (Praxis) — ISO 16890 • EN 779 • EN 1822 • MERV</h1>
+      <h1>Filterklassen – Vergleich & Montagehilfe (Praxis)</h1>
       <p class="sub">
-        Norm auswählen → Klasse eingeben → Vergleichsbezeichnungen übersichtlich ausgeben.
-        <b>ISO 16890 ↔ EN 779 ↔ MERV ist nur orientierend</b> (unterschiedliche Prüfmethodik/Staub). HEPA/EPA/ULPA ist EN 1822.
+        Links eingeben → rechts erhältst du Vergleichsklassen (Richtwert), Erklärung und zusätzlich eine
+        <b>Montagehilfe für Taschenfilter</b> (Taschen müssen frei hängen/stehen, nicht umknicken).
       </p>
     </div>
     <div class="pillrow">
-      <span class="pill"><span class="dot ok"></span>ohne externe Libraries</span>
-      <span class="pill"><span class="dot ok"></span>läuft offline</span>
+      <span class="pill"><span class="dot ok"></span>Monteur-tauglich</span>
+      <span class="pill"><span class="dot ok"></span>läuft stabil auf GitHub Pages</span>
       <span class="pill"><span class="dot warn"></span>Vergleich = Richtwert</span>
     </div>
   </header>
@@ -149,123 +218,194 @@
   <div class="grid">
     <!-- LEFT -->
     <section class="card" id="leftPanel">
-      <h2>Eingabe</h2>
-
-      <div class="row">
-        <div>
-          <label>Norm / Standard</label>
-          <select id="stdSelect">
-            <option value="iso16890">ISO 16890 (ePM…)</option>
-            <option value="en779">EN 779 (G/M/F – Bestand)</option>
-            <option value="en1822">EN 1822 (EPA/HEPA/ULPA)</option>
-            <option value="merv">ASHRAE 52.2 (MERV)</option>
-          </select>
+      <div class="section">
+        <div class="sectionHead">
+          <div>
+            <div class="step"><b>Schritt 1</b> Eingabe</div>
+            <div class="sectionTitle" style="margin-top:8px;">Norm und Filterklasse eingeben</div>
+            <div class="sectionDesc">Schnell: <span class="mono">F7</span> oder <span class="mono">ePM1 60%</span> → Enter.</div>
+          </div>
         </div>
-        <div>
-          <label>Schnelleingabe (Auto-Erkennung)</label>
-          <input id="quickInput" placeholder='z. B. "ePM1 60%", "F7", "F5", "H13", "MERV 13"' />
-          <div class="mini">Enter → erkennen & ausgeben</div>
-        </div>
-      </div>
 
-      <div class="row" id="isoBlock" style="margin-top:10px;">
-        <div>
-          <label>ISO 16890 Fraktion</label>
-          <select id="isoFrac">
-            <option value="ePM1">ePM1</option>
-            <option value="ePM25">ePM2,5</option>
-            <option value="ePM10">ePM10</option>
-            <option value="Coarse">Coarse</option>
-          </select>
-        </div>
-        <div>
-          <label>Abscheidegrad [%]</label>
-          <input id="isoPct" type="number" min="0" max="100" value="60"/>
-        </div>
-      </div>
-
-      <div class="row" id="en779Block" style="display:none; margin-top:10px;">
-        <div>
-          <label>EN 779 Klasse</label>
-          <select id="en779Sel"></select>
-        </div>
-        <div>
-          <label>Hinweis</label>
-          <div class="hint">Altunterlagen: <span class="mono">F5 ≈ M5</span> und <span class="mono">F6 ≈ M6</span>.</div>
-        </div>
-      </div>
-
-      <div class="row" id="en1822Block" style="display:none; margin-top:10px;">
-        <div>
-          <label>EN 1822 Klasse</label>
-          <select id="en1822Sel"></select>
-        </div>
-        <div>
-          <label>Praxis-Hinweis</label>
-          <div class="hint">EN 1822: MPPS + Leckage/Scan. In RLT meist <b>Endfilter</b> mit sauberen Vorstufen.</div>
-        </div>
-      </div>
-
-      <div class="row" id="mervBlock" style="display:none; margin-top:10px;">
-        <div>
-          <label>MERV</label>
-          <select id="mervSel"></select>
-        </div>
-        <div>
-          <label>Hinweis</label>
-          <div class="hint">MERV ↔ ISO 16890 nur orientierend. Maßgeblich sind ePM-Werte + Druckverlust aus dem Datenblatt.</div>
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:10px;" id="actionRow">
-        <button class="btn" id="applyBtn">Vergleich anzeigen</button>
-        <button class="btnGhost" id="resetBtn">Zurücksetzen</button>
-      </div>
-
-      <hr class="hr"/>
-
-      <div class="hint">
-        <b>Erklärung:</b> <span class="mono">ePM1 60%</span> bedeutet: im ISO-Test ca. <b>60%</b> Abscheidung der <b>PM1-Fraktion</b> (≤ 1 µm).
-      </div>
-
-      <hr class="hr"/>
-
-      <div id="presetPanel">
-        <h2>Presets (typische Filterketten)</h2>
         <div class="row">
           <div>
-            <label>Preset wählen</label>
+            <label>Norm / Standard</label>
+            <select id="stdSelect">
+              <option value="iso16890">ISO 16890 (ePM…)</option>
+              <option value="en779">EN 779 (G/M/F – Bestandsanlagen)</option>
+              <option value="en1822">EN 1822 (EPA / HEPA / ULPA)</option>
+              <option value="merv">ASHRAE 52.2 (MERV)</option>
+            </select>
+          </div>
+          <div>
+            <label>Schnelleingabe (z. B. „F7“ oder „ePM1 60%“)</label>
+            <input id="quickInput" placeholder='Beispiele: ePM1 60% | Coarse 70% | F7 | F5 | H13 | MERV 13' />
+            <div class="mini">Enter → automatisch erkennen und anzeigen</div>
+          </div>
+        </div>
+
+        <div class="row" id="isoBlock" style="margin-top:10px;">
+          <div>
+            <label>ISO 16890 Fraktion</label>
+            <select id="isoFrac">
+              <option value="ePM1">ePM1 (sehr fein)</option>
+              <option value="ePM25">ePM2,5 (Feinstaub)</option>
+              <option value="ePM10">ePM10 (Pollen/Staub)</option>
+              <option value="Coarse">Coarse (Vorfilter – grob)</option>
+            </select>
+            <div class="mini"><b>Coarse</b> = Grobfilter für große Partikel (Vorfilter/Anlagenschutz).</div>
+          </div>
+          <div>
+            <label>Abscheidegrad [%]</label>
+            <input id="isoPct" type="number" min="0" max="100" value="60"/>
+          </div>
+        </div>
+
+        <div class="row" id="en779Block" style="display:none; margin-top:10px;">
+          <div>
+            <label>EN 779 Klasse (Bestand)</label>
+            <select id="en779Sel"></select>
+          </div>
+          <div>
+            <label>Hinweis</label>
+            <div class="hint"><b>Altbezeichnungen:</b> <span class="mono">F5 ≈ M5</span> und <span class="mono">F6 ≈ M6</span>.</div>
+          </div>
+        </div>
+
+        <div class="row" id="en1822Block" style="display:none; margin-top:10px;">
+          <div>
+            <label>EN 1822 Klasse (EPA/HEPA/ULPA)</label>
+            <select id="en1822Sel"></select>
+          </div>
+          <div>
+            <label>Einfach erklärt</label>
+            <div class="hint"><b>HEPA ist Endfilter</b> (eigene Norm). Das wird nicht „umgerechnet“, sondern als Endstufe eingeordnet.</div>
+          </div>
+        </div>
+
+        <div class="row" id="mervBlock" style="display:none; margin-top:10px;">
+          <div>
+            <label>MERV</label>
+            <select id="mervSel"></select>
+          </div>
+          <div>
+            <label>Hinweis</label>
+            <div class="hint">MERV ist US-System. Vergleich zu ISO/EN ist <b>nur Richtwert</b>.</div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;" id="actionRow">
+          <button class="btn" id="applyBtn">Vergleich anzeigen</button>
+          <button class="btnGhost" id="resetBtn">Zurücksetzen</button>
+        </div>
+
+        <div class="hint" style="margin-top:12px;">
+          <b>Merksatz:</b> <span class="mono">ePM1 60%</span> bedeutet: ca. <b>60%</b> Abscheidung der <b>PM1-Partikel</b> im ISO-Test.
+        </div>
+      </div>
+
+      <div class="section" id="exampleBlock">
+        <div class="sectionHead">
+          <div>
+            <div class="step step2"><b>Schritt 2</b> Beispiele</div>
+            <div class="sectionTitle" style="margin-top:8px;">Typische Filter-Kombinationen (Voreinstellungen)</div>
+            <div class="sectionDesc">Hilft, wenn man schnell eine übliche Kette auswählen will (Vorfilter + Feinfilter, ggf. HEPA).</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Beispiel auswählen</label>
             <select id="presetSel"></select>
+            <div class="mini" id="presetHint"></div>
           </div>
           <div>
             <label>&nbsp;</label>
-            <button class="btn2" id="presetApplyBtn">Preset übernehmen</button>
+            <button class="btn2" id="presetApplyBtn">Beispiel übernehmen</button>
           </div>
         </div>
-        <div class="mini" id="presetHint"></div>
+      </div>
+
+      <div class="section" id="mountBlock">
+        <div class="sectionHead">
+          <div>
+            <div class="step step3"><b>Schritt 3</b> Montagehilfe</div>
+            <div class="sectionTitle" style="margin-top:8px;">Taschenfilter – Einbaulage / Taschenrichtung prüfen</div>
+            <div class="sectionDesc">
+              Problem: Bei falscher Lage <b>knicken Taschen um</b> / liegen auf / werden „zu“. Ziel: Taschen müssen <b>frei hängen/stehen</b>.
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Rahmenmaß (mm) – Breite</label>
+            <input id="mW" type="number" min="50" step="1" placeholder="z. B. 592"/>
+          </div>
+          <div>
+            <label>Rahmenmaß (mm) – Höhe</label>
+            <input id="mH" type="number" min="50" step="1" placeholder="z. B. 592"/>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Einbaulage</label>
+            <select id="mOrient">
+              <option value="vertical">Vertikal (Filter steht)</option>
+              <option value="horizontal">Horizontal (Filter liegt)</option>
+            </select>
+          </div>
+          <div>
+            <label>Taschen-Anforderung</label>
+            <select id="mNeed">
+              <option value="hang">Taschen sollen frei hängen (nicht aufliegen)</option>
+              <option value="stand">Taschen sollen frei stehen (nicht umknicken)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <button class="btn2" id="mCheckBtn">Einbaulage prüfen</button>
+          <button class="btnGhost" id="mResetBtn">Felder leeren</button>
+        </div>
+
+        <div class="hint" id="mOut" style="margin-top:12px;">
+          Trage Maße ein und prüfe. Hinweis: <b>Luftstrom-Pfeil</b> und <b>Aufdruck „TOP“</b> am Filter immer beachten.
+        </div>
       </div>
     </section>
 
     <!-- RIGHT -->
     <section class="card" id="rightPanel">
       <div id="printHeader">
-        <div class="t">Filterklassen-Vergleich – Ergebnis</div>
+        <div class="t">Filterklassen – Ergebnis</div>
         <div class="s" id="printMeta"></div>
       </div>
 
       <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;">
-        <h2 style="margin:0;">Vergleichsfilter (andere Normen)</h2>
+        <h2 style="margin:0;">Vergleichsausgabe</h2>
         <button class="btnGhost" id="printBtn" style="width:auto; padding:9px 12px;">Drucken / PDF</button>
       </div>
 
       <div id="summary" class="hint" style="margin:10px 0;">
-        Wähle links eine Norm/Klasse oder nutze die Schnelleingabe.
+        Links eine Norm/Klasse eingeben.
       </div>
-      <div class="resultGrid" id="results"></div>
+
+      <div class="section" id="legendBlock">
+        <div class="sectionTitle">Ampel-Legende</div>
+        <div class="legend">
+          <div class="item"><span class="lamp g"></span><div><span class="b">Grün:</span> gute Vergleichsklasse (Richtwert). Hilft beim Einordnen.</div></div>
+          <div class="item"><span class="lamp y"></span><div><span class="b">Gelb:</span> Vergleich nur grob (Richtwert). Für EU besser ISO 16890 nutzen.</div></div>
+          <div class="item"><span class="lamp r"></span><div><span class="b">Rot:</span> nicht umrechnen (eigene Norm/Filtertyp) – z. B. HEPA (EN 1822).</div></div>
+        </div>
+      </div>
+
+      <div class="resultGrid" id="results" style="margin-top:12px;"></div>
 
       <div class="footer">
         <div class="warnText">
-          <b>Wichtig:</b> EN 779 ↔ ISO 16890 ↔ MERV ist Richtwert. Für Bestellung: Hersteller-Datenblatt/Prüfbericht + Anlagenanforderung (Hygiene, Außenluft, Druckverlust, Dichtheit).
+          <b>Wichtig:</b> Für Auswahl/Bestellung zählt das <b>Datenblatt</b> (ePM-Werte, Druckverlust, Dichtheit) und das Anlagenkonzept.
         </div>
       </div>
     </section>
@@ -275,31 +415,29 @@
 <script>
 /* ========= Daten ========= */
 
-// EN 779 (Bestand) inkl. Alias
 const EN779 = [
-  { id:"G4", label:"G4", stage:"Vorfilter", notes:["Vorfilter/Anlagenschutz, verlängert Standzeit der Feinfilter.","Heute häufig als ISO Coarse bezeichnet (Richtwert)."]},
-  { id:"M5", label:"M5 (ehem. F5)", alias:["F5","M5"], stage:"Mittelfilter", notes:["Mittelfilter / Schutzstufe vor Feinfiltern.","In Bestandsunterlagen oft als F5 geführt."]},
-  { id:"M6", label:"M6 (ehem. F6)", alias:["F6","M6"], stage:"Mittelfilter", notes:["Bessere Vorstufe vor F7/F9, in Altunterlagen als F6."]},
-  { id:"F7", label:"F7", stage:"Feinfilter (Zuluft)", notes:["Häufiger Zuluft-Feinfilter (Büro/Lehre, je nach Konzept).","Praxis: ePM1 60% liegt häufig im F7-Überlappungsbereich."]},
-  { id:"F8", label:"F8", stage:"Feinfilter (hoch)", notes:["Höhere Feinstaubabscheidung, z. B. Stadtlage/hohe Außenluftbelastung."]},
-  { id:"F9", label:"F9", stage:"Feinfilter (sehr hoch)", notes:["Sehr hohe Feinabscheidung, oft vor HEPA-Endfiltern oder anspruchsvoller Zuluft."]},
+  { id:"G4", label:"G4", stage:"Vorfilter", notes:["Vorfilter/Anlagenschutz, Standzeit der Feinfilter erhöhen."]},
+  { id:"M5", label:"M5 (ehem. F5)", alias:["F5","M5"], stage:"Mittelfilter", notes:["Mittelfilter / Schutzstufe vor Feinfiltern (Alt: F5)."]},
+  { id:"M6", label:"M6 (ehem. F6)", alias:["F6","M6"], stage:"Mittelfilter", notes:["Bessere Vorstufe vor F7/F9 (Alt: F6)."]},
+  { id:"F7", label:"F7", stage:"Feinfilter", notes:["Häufiger Zuluft-Feinfilter (Büro/Lehre je nach Konzept)."]},
+  { id:"F8", label:"F8", stage:"Feinfilter (hoch)", notes:["Höhere Feinabscheidung (z. B. Stadtlage)."]},
+  { id:"F9", label:"F9", stage:"Feinfilter (sehr hoch)", notes:["Sehr hohe Feinabscheidung, oft vor HEPA-Endfiltern."]},
 ];
 
 const ISO_FRAC_DESC = {
-  ePM1:  "Feinstpartikel ≤ 1 µm (Feinstaub/Verbrennungsrauch, sehr feine Aerosole).",
-  ePM25: "Feinstaub ≤ 2,5 µm (gesundheitlich relevant, städtische Außenluft).",
-  ePM10: "≤ 10 µm (Pollen, gröbere Stäube, Schwebstoffe).",
-  Coarse:"Grob > 10 µm (Vorfilter/Anlagenschutz, Standzeit)."
+  ePM1:  "PM1 (sehr feine Partikel)",
+  ePM25: "PM2,5 (Feinstaub)",
+  ePM10: "PM10 (Pollen/Staub)",
+  Coarse:"Coarse = Grobfilter (>10 µm) – typischer Vorfilter/Anlagenschutz"
 };
 
-// Richtwert-Zuordnung (praxisnah)
 const EN779_TO_HINT = {
-  G4: { iso:["ISO Coarse 60–80% (Richtwert)"], merv:["MERV 6–8 (Richtwert)"] },
-  M5: { iso:["ISO ePM10 50–70% (typisch)"],    merv:["MERV 9–10 (Richtwert)"] },
-  M6: { iso:["ISO ePM10 60–80% (typisch)"],    merv:["MERV 10–12 (Richtwert)"] },
-  F7: { iso:["ISO ePM1 55–65% (typisch)"],     merv:["MERV 13 (Richtwert)"] },
-  F8: { iso:["ISO ePM1 70–85% (typisch)"],     merv:["MERV 14 (Richtwert)"] },
-  F9: { iso:["ISO ePM1 80–90% (typisch)"],     merv:["MERV 15 (Richtwert)"] },
+  G4: { iso:["ISO Coarse 60–80%"], merv:["MERV 6–8"] },
+  M5: { iso:["ISO ePM10 50–70%"],  merv:["MERV 9–10"] },
+  M6: { iso:["ISO ePM10 60–80%"],  merv:["MERV 10–12"] },
+  F7: { iso:["ISO ePM1 55–65%"],   merv:["MERV 13"] },
+  F8: { iso:["ISO ePM1 70–85%"],   merv:["MERV 14"] },
+  F9: { iso:["ISO ePM1 80–90%"],   merv:["MERV 15"] },
 };
 
 function isoToEn779(frac, pct){
@@ -327,76 +465,88 @@ function isoToEn779(frac, pct){
 }
 
 const MERV = [
-  { id:"MERV 8",  iso:"ISO ePM10 ~50% / Coarse (Richtwert)", use:"Vor-/Mittelfilter, Schutzstufe" },
-  { id:"MERV 11", iso:"ISO ePM10 ~60–70% (Richtwert)",      use:"bessere Vorstufe, oft vor ePM1-Feinfiltern" },
-  { id:"MERV 13", iso:"ISO ePM1 ~50–65% (Richtwert)",       use:"häufige Zuluft-Feinfilterklasse (US-Bezug)" },
-  { id:"MERV 14", iso:"ISO ePM1 ~70–85% (Richtwert)",       use:"höhere Feinabscheidung" },
-  { id:"MERV 15", iso:"ISO ePM1 ~80–90% (Richtwert)",       use:"sehr hoch, oft vor Endstufen" },
-  { id:"MERV 16", iso:"ISO ePM1 ~90–95% (Richtwert)",       use:"sehr hohe Feinabscheidung (noch vor HEPA zu sehen)" },
+  { id:"MERV 8",  iso:"ISO ePM10 ~50% / Coarse", use:"Vor-/Mittelfilter (Schutz)" },
+  { id:"MERV 11", iso:"ISO ePM10 ~60–70%",      use:"bessere Vorstufe" },
+  { id:"MERV 13", iso:"ISO ePM1 ~50–65%",       use:"Feinfilter (US-Bezug)" },
+  { id:"MERV 14", iso:"ISO ePM1 ~70–85%",       use:"Feinfilter (hoch)" },
+  { id:"MERV 15", iso:"ISO ePM1 ~80–90%",       use:"sehr hoch, oft vor Endstufen" },
+  { id:"MERV 16", iso:"ISO ePM1 ~90–95%",       use:"sehr hoch (noch vor HEPA)" },
 ];
 
 const EN1822 = [
-  { id:"E10 (EPA)",  eff:"≥ 85% (MPPS)",       use:"Vorstufe vor HEPA, Technik/Prozess je nach Konzept" },
-  { id:"E11 (EPA)",  eff:"≥ 95% (MPPS)",       use:"Vorstufe für H13/H14 oder Endstufe weniger kritisch" },
-  { id:"E12 (EPA)",  eff:"≥ 99,5% (MPPS)",     use:"hochwirksame Vorstufe, Prozess/Hygiene" },
-  { id:"H13 (HEPA)", eff:"≥ 99,95% (MPPS)",    use:"typischer HEPA-Endfilter, Labor/Klinik je nach Konzept" },
-  { id:"H14 (HEPA)", eff:"≥ 99,995% (MPPS)",   use:"sehr hohe Anforderungen, kritische Bereiche/Reinraum" },
-  { id:"U15 (ULPA)", eff:"≥ 99,9995% (MPPS)",  use:"Reinraum/High-End-Prozess" },
-  { id:"U16 (ULPA)", eff:"≥ 99,99995% (MPPS)", use:"Reinraum/High-End-Prozess" },
-  { id:"U17 (ULPA)", eff:"≥ 99,999995% (MPPS)",use:"Reinraum/High-End-Prozess" },
+  { id:"E10 (EPA)",  eff:"≥ 85% (MPPS)",       use:"EPA-Vorstufe vor HEPA" },
+  { id:"E11 (EPA)",  eff:"≥ 95% (MPPS)",       use:"EPA-Vorstufe vor HEPA" },
+  { id:"E12 (EPA)",  eff:"≥ 99,5% (MPPS)",     use:"EPA-Vorstufe (hoch)" },
+  { id:"H13 (HEPA)", eff:"≥ 99,95% (MPPS)",    use:"HEPA-Endfilter (häufig)" },
+  { id:"H14 (HEPA)", eff:"≥ 99,995% (MPPS)",   use:"HEPA-Endfilter (sehr hoch)" },
+  { id:"U15 (ULPA)", eff:"≥ 99,9995% (MPPS)",  use:"ULPA (Reinraum/High-End)" },
+  { id:"U16 (ULPA)", eff:"≥ 99,99995% (MPPS)", use:"ULPA (Reinraum/High-End)" },
+  { id:"U17 (ULPA)", eff:"≥ 99,999995% (MPPS)",use:"ULPA (Reinraum/High-End)" },
 ];
 
 const PRESETS = [
   {
     id:"office_std",
-    name:"Büro/Lehre – Standard (2-stufig)",
+    name:"Büro/Lehre – Standard (Vorfilter + Feinfilter)",
     apply:{ std:"iso16890", iso:{ frac:"ePM1", pct:60 } },
     chain:[
-      { stage:"Vorfilter", value:"ISO Coarse 60–70% (≈ Bestand G4)" },
+      { stage:"Vorfilter", value:"ISO Coarse 60–70% (≈ G4)" },
       { stage:"Feinfilter", value:"ISO ePM1 55–65% (≈ F7)" }
     ],
-    notes:["Guter Standard-Aufbau: Standzeit/Schutz + Feinstaubabscheidung.","Bei belasteter Außenluft: eher ePM1 70–85% (≈ F8)."]
+    notes:["Standardlösung in vielen RLT-Anlagen (je nach Konzept)."]
   },
   {
     id:"office_city",
-    name:"Büro – Stadtlage/hohe Außenluftbelastung",
+    name:"Büro – Stadtlage (bessere Feinabscheidung)",
     apply:{ std:"iso16890", iso:{ frac:"ePM1", pct:80 } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 70–80%" },
       { stage:"Feinfilter", value:"ISO ePM1 70–85% (≈ F8)" }
     ],
-    notes:["Höhere Feinstaubabscheidung, dafür oft mehr Druckverlust.","Ventilatorreserve/Filterauslegung prüfen."]
+    notes:["Mehr Schutz, oft mehr Druckverlust → Auslegung beachten."]
   },
   {
     id:"lab_general",
-    name:"Labor allgemein – ohne Reinraum (2–3-stufig)",
+    name:"Labor allgemein (ohne Reinraum) – höhere Feinfilterstufe",
     apply:{ std:"en779", en779:{ cls:"F9" } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 70–80%" },
-      { stage:"Feinfilter", value:"ISO ePM1 80–90% (≈ F9)" },
-      { stage:"Option", value:"EPA/HEPA nur nach Konzept/Anforderung (z. B. H13)" }
+      { stage:"Feinfilter", value:"ISO ePM1 80–90% (≈ F9)" }
     ],
-    notes:["Viele Labore brauchen nicht automatisch HEPA – Konzept entscheidet.","Wenn HEPA: Vorstufen sauber halten (sonst kurze Standzeit)."]
+    notes:["HEPA nur, wenn Prozess/Hygiene das fordert."]
   },
   {
     id:"hepa_end",
-    name:"HEPA-Endstufe (H13) – typische Kette",
+    name:"HEPA-Endfilter (H13) – typische Kette",
     apply:{ std:"en1822", en1822:{ id:"H13 (HEPA)" } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 70–80%" },
       { stage:"Feinfilter", value:"ISO ePM1 80–90% (≈ F9)" },
       { stage:"Endfilter", value:"H13 (HEPA) – EN 1822" }
     ],
-    notes:["HEPA ist Endfilter: Dichtheit/Bypass/Einbau kritisch.","Wechsel oft über Druckverlust + ggf. Monitoring nach Konzept."]
+    notes:["HEPA = Endfilter. Dichtheit/Einbau wichtig."]
   }
 ];
 
-/* ========= UI Helpers ========= */
+/* ========= UI ========= */
 const $ = (id)=>document.getElementById(id);
 function show(id, on){ $(id).style.display = on ? "" : "none"; }
 function setSummary(html){ $("summary").innerHTML = html; }
 function clearResults(){ $("results").innerHTML = ""; }
-function addCard({title,badge,main,items,note}){
+
+function setPrintMeta(text){
+  const dt=new Date().toLocaleString("de-DE");
+  $("printMeta").textContent = `${text} • erstellt: ${dt}`;
+}
+
+function ampelText(level){
+  if(level==="green") return { lamp:"g", text:"Grün: gute Vergleichsklasse (Richtwert)" };
+  if(level==="yellow") return { lamp:"y", text:"Gelb: Vergleich nur grob (Richtwert)" };
+  return { lamp:"r", text:"Rot: nicht umrechnen (eigene Norm/Filtertyp)" };
+}
+
+function addCard({title,badge,main,ampelLevel,useTitle,useText,useHint,items}){
+  const a = ampelText(ampelLevel||"yellow");
   const div=document.createElement("div");
   div.className="rCard";
   div.innerHTML=`
@@ -404,22 +554,29 @@ function addCard({title,badge,main,items,note}){
       <div>
         <div><b>${title}</b></div>
         <div class="bigMono">${main||""}</div>
+        <div class="metaRow">
+          <div class="ampel">
+            <span class="lamp ${a.lamp}"></span>
+            <span>${a.text}</span>
+          </div>
+        </div>
       </div>
       <div class="badge">${badge||""}</div>
     </div>
+
+    <div class="useBlock">
+      <div class="useTitle">${useTitle||"Wofür nutzt man das?"}</div>
+      <p class="useText">${useText||"—"}</p>
+      ${useHint ? `<div class="useHint">${useHint}</div>` : ``}
+    </div>
+
     <div class="rBody">
       ${items && items.length ? `<ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}
-      ${note ? `<div class="hint" style="margin-top:10px">${note}</div>` : ""}
     </div>
   `;
   $("results").appendChild(div);
 }
-function setPrintMeta(text){
-  const dt=new Date().toLocaleString("de-DE");
-  $("printMeta").textContent = `${text} • erstellt: ${dt}`;
-}
 
-/* ========= Parsing Quick Input ========= */
 function normQ(s){ return (s||"").trim().replace(/\s+/g," ").toUpperCase(); }
 function parseQuick(q){
   const s=normQ(q);
@@ -456,18 +613,16 @@ function parseQuick(q){
   return null;
 }
 
-/* ========= Rendering ========= */
 function renderChain(p){
-  const rows = p.chain.map(x=>`<li><b>${x.stage}:</b> <span class="mono">${x.value}</span></li>`).join("");
-  const notes = p.notes.map(x=>`<li>${x}</li>`).join("");
   addCard({
-    title:"Preset: typische Filterkette",
-    badge:"Praxis",
+    title:"Ausgewähltes Beispiel (Filterkombination)",
+    badge:"Praxis-Beispiel",
     main:"",
-    items:[],
-    note:`<ul style="margin:0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.45;">${rows}</ul>
-          <div style="margin-top:10px; font-size:12px; color:var(--muted);"><b>Hinweise:</b>
-          <ul style="margin:6px 0 0; padding-left:18px;">${notes}</ul></div>`
+    ampelLevel:"green",
+    useTitle:"Wofür ist das gedacht?",
+    useText:"Als typische Kombination in der Anlage (Vorfilter + Feinfilter, ggf. HEPA-Endfilter).",
+    useHint:"Hilft beim schnellen Einordnen. Für Bestellung gilt: Datenblatt + Konzept.",
+    items: p.chain.map(x=>`<b>${x.stage}:</b> <span class="mono">${x.value}</span>`)
   });
 }
 
@@ -476,21 +631,23 @@ function renderISO(frac,pct,preset=null){
   const pctN=Number(pct);
   const fracLabel = (frac==="ePM25") ? "ePM2,5" : frac;
 
-  setSummary(`Eingabe: <b class="mono">${fracLabel} ${pctN}%</b><br><span class="muted">${ISO_FRAC_DESC[frac]||""}</span>`);
+  setSummary(`Eingabe: <b class="mono">${fracLabel} ${pctN}%</b><br><span class="mono">${ISO_FRAC_DESC[frac]||""}</span>`);
   if(preset) renderChain(preset);
 
   const cand = isoToEn779(frac,pctN);
   const candText = cand.length ? cand.map(id=>EN779.find(x=>x.id===id)?.label||id).join(" · ") : "—";
 
   addCard({
-    title:"EN 779 (Bestand)",
-    badge:"Richtwert",
+    title:"EN 779 (Bestandsanlagen)",
+    badge:"Vergleich",
     main:candText,
+    ampelLevel:"green",
+    useTitle:"Wofür nutzt man EN 779 hier?",
+    useText:"Zum Abgleich alter Unterlagen / Bestandsangaben.",
+    useHint:"EN 779 ist alt. Für Neubestellung: ISO 16890 Werte aus dem Datenblatt.",
     items:[
-      "EN 779 ist abgekündigt, taucht aber in Bestandsunterlagen auf.",
-      "Für Auswahl/Bestellung: Datenblatt (ePM-Werte, Druckverlust, Dichtheit) prüfen."
-    ],
-    note:(frac==="ePM1" && pctN>=55 && pctN<=65) ? "Praxis: <b>ePM1 60%</b> liegt häufig im <b>F7-Bereich</b>." : ""
+      (frac==="ePM1" && pctN>=55 && pctN<=65) ? "<b>Merke:</b> ePM1 60% liegt häufig im Bereich von F7." : "Hinweis: keine 1:1 Umrechnung."
+    ]
   });
 
   // MERV grob
@@ -504,17 +661,25 @@ function renderISO(frac,pct,preset=null){
   if(frac==="ePM1" && pctN>=95) mervHint="MERV 16 (Richtwert)";
 
   addCard({
-    title:"ASHRAE 52.2 (MERV)",
-    badge:"Richtwert",
+    title:"MERV (US-System)",
+    badge:"Vergleich",
     main:mervHint,
-    items:["MERV basiert auf anderer Methodik als ISO 16890.","Als Vergleich hilfreich – keine harte Umrechnung."]
+    ampelLevel:"yellow",
+    useTitle:"Wofür nutzt man MERV hier?",
+    useText:"Wenn US-Unterlagen/Herstellerangaben vorliegen.",
+    useHint:"Vergleich ist grob. Für EU lieber ISO 16890 Werte nutzen.",
+    items:["Andere Prüfmethode als ISO 16890 → deshalb nur Richtwert."]
   });
 
   addCard({
-    title:"EN 1822 (EPA/HEPA/ULPA)",
-    badge:"separat",
+    title:"HEPA / EPA / ULPA (EN 1822)",
+    badge:"HEPA",
     main:"E10–E12 / H13–H14 / U15–U17",
-    items:["Hochleistungsfilter: MPPS + Leckageprüfung.","Bei HEPA in RLT: Vorstufen (Coarse + Feinfilter hoch) sind entscheidend."]
+    ampelLevel:"red",
+    useTitle:"Wofür ist EN 1822?",
+    useText:"Für HEPA/ULPA-Endfilter (eigene Norm mit Leckageprüfung).",
+    useHint:"Nicht umrechnen. Entscheidend: korrekter Einbau, Dichtheit, kein Bypass.",
+    items:["Wenn HEPA: Vorfilter + Feinfilter davor sind wichtig (Standzeit)."]
   });
 
   setPrintMeta(`ISO 16890: ${fracLabel} ${pctN}%`);
@@ -523,28 +688,44 @@ function renderISO(frac,pct,preset=null){
 function renderEN779(cls,preset=null){
   clearResults();
   const obj=EN779.find(x=>x.id===cls);
-  setSummary(`Eingabe: <b class="mono">${obj?obj.label:cls}</b><br><span class="muted">Stufe: ${obj?.stage||"—"}</span>`);
+  setSummary(`Eingabe: <b class="mono">${obj?obj.label:cls}</b><br><span class="mono">Einsatz: ${obj?.stage||"—"}</span>`);
   if(preset) renderChain(preset);
 
   const h=EN779_TO_HINT[cls];
+
   addCard({
-    title:"ISO 16890",
-    badge:"Richtwert",
+    title:"ISO 16890 (aktuelle Norm)",
+    badge:"Vergleich",
     main:(h?.iso||["—"]).join(" · "),
-    items:["ISO 16890 ist die aktuelle Klassifikation (ePM-Fraktionen).","Konkrete ePM-Werte je Hersteller prüfen."]
+    ampelLevel:"green",
+    useTitle:"Wofür nutzt man ISO 16890?",
+    useText:"Für aktuelle Filterangaben im Datenblatt (ePM-Werte).",
+    useHint:"Herstellerwerte sind maßgeblich (Druckverlust/Standzeit/Dichtheit).",
+    items:["ISO 16890 ist heute üblich für Ausschreibung/Bestellung."]
   });
+
   addCard({
-    title:"ASHRAE 52.2 (MERV)",
-    badge:"Richtwert",
+    title:"MERV (US-System)",
+    badge:"Vergleich",
     main:(h?.merv||["—"]).join(" · "),
-    items:["Hilfreich bei US-Bezug/International.","Technisch maßgeblich: Druckverlust, Standzeit, Dichtheit, Datenblatt."]
+    ampelLevel:"yellow",
+    useTitle:"Wofür nutzt man MERV?",
+    useText:"Nur wenn US-Angaben vorliegen.",
+    useHint:"Nicht 1:1. Für EU-Bestellung bevorzugt ISO 16890.",
+    items:["Als Richtwert für internationale Unterlagen."]
   });
+
   addCard({
-    title:"Praxisnotizen",
+    title:"Kurze Praxis-Erklärung",
     badge:obj?.stage||"",
     main:obj?obj.id:cls,
-    items:obj?.notes||[],
-    note:(cls==="M5"||cls==="M6") ? "Altbezeichnungen: <b>F5 ↔ M5</b>, <b>F6 ↔ M6</b>." : ""
+    ampelLevel:"green",
+    useTitle:"Wofür nutzt man das in der Anlage?",
+    useText: obj?.stage==="Vorfilter" ? "Vorfilter zum Schutz der Anlage und zur Standzeitverlängerung." :
+            obj?.stage?.includes("Feinfilter") || obj?.stage==="Feinfilter" ? "Feinfilter für Zuluftqualität / Feinstaubabscheidung." :
+            "Filterstufe zur Einordnung.",
+    useHint:"Achte beim Wechsel: Dichtungen, Sitz, Bypass vermeiden. Pfeilrichtung beachten.",
+    items: obj?.notes || []
   });
 
   setPrintMeta(`EN 779: ${obj?obj.label:cls}`);
@@ -553,21 +734,29 @@ function renderEN779(cls,preset=null){
 function renderEN1822(id,preset=null){
   clearResults();
   const obj=EN1822.find(x=>x.id===id) || EN1822.find(x=>x.id.startsWith(id));
-  setSummary(`Eingabe: <b class="mono">${obj?.id||id}</b><br><span class="muted">Mindestwirkungsgrad: ${obj?.eff||"—"} • ${obj?.use||""}</span>`);
+  setSummary(`Eingabe: <b class="mono">${obj?.id||id}</b><br><span class="mono">${obj?.eff||"—"} • ${obj?.use||""}</span>`);
   if(preset) renderChain(preset);
 
   addCard({
-    title:"EN 1822 Klasse",
-    badge:"Endfilter",
+    title:"HEPA/EPA/ULPA Klasse (EN 1822)",
+    badge:"HEPA",
     main:obj?.id||id,
-    items:[`Mindestwirkungsgrad: <span class="mono">${obj?.eff||"—"}</span>`, obj?.use||"—"],
-    note:"Praxis: <b>Dichtheit im Einbau</b> (Bypass/Leckage) ist genauso wichtig wie die Filterklasse."
+    ampelLevel:"red",
+    useTitle:"Wofür nutzt man das?",
+    useText:"Als Endfilter in sensiblen Bereichen – eigene Norm mit Leckageprüfung.",
+    useHint:"Für Monteure: korrekter Einbau + Dichtheit = entscheidend (sonst bringt die Klasse nichts).",
+    items:[`Mindestwirkungsgrad: <span class="mono">${obj?.eff||"—"}</span>`]
   });
+
   addCard({
-    title:"Vergleich zu ISO/EN 779/MERV",
-    badge:"Hinweis",
-    main:"keine direkte Umrechnung",
-    items:["HEPA/EPA/ULPA haben eigene Normlogik (MPPS/Leckage).","RLT-Kette: Vorfilter + Feinfilter (hoch) vor HEPA."]
+    title:"Hinweis",
+    badge:"Info",
+    main:"Keine Umrechnung aus ISO/EN 779",
+    ampelLevel:"red",
+    useTitle:"Warum keine Umrechnung?",
+    useText:"HEPA ist ein eigener Filtertyp mit anderer Prüfung (MPPS/Leckage).",
+    useHint:"Typisch: Vorfilter + Feinfilter (hoch) vor HEPA-Endfilter.",
+    items:[]
   });
 
   setPrintMeta(`EN 1822: ${obj?.id||id}`);
@@ -576,38 +765,118 @@ function renderEN1822(id,preset=null){
 function renderMERV(id,preset=null){
   clearResults();
   const obj=MERV.find(x=>x.id===id);
-  setSummary(`Eingabe: <b class="mono">${id}</b><br><span class="muted">Vergleich zu ISO/EN 779 nur orientierend.</span>`);
+  setSummary(`Eingabe: <b class="mono">${id}</b><br><span class="mono">US-System – Vergleich zu ISO/EN nur Richtwert.</span>`);
   if(preset) renderChain(preset);
 
   addCard({
-    title:"ASHRAE 52.2 (MERV)",
-    badge:"US-Bezug",
+    title:"MERV (ASHRAE 52.2)",
+    badge:"US-System",
     main:id,
+    ampelLevel:"yellow",
+    useTitle:"Wofür nutzt man das?",
+    useText:"Für US-Unterlagen / internationale Angaben.",
+    useHint:"Wenn du in Deutschland bestellst: besser ISO 16890 (Datenblatt) nutzen.",
     items:[obj?`ISO-Richtwert: <span class="mono">${obj.iso}</span>`:"ISO-Richtwert: —", obj?obj.use:"Einsatz: —"]
-  });
-  addCard({
-    title:"ISO 16890 (Richtwert)",
-    badge:"Richtwert",
-    main:obj?.iso||"—",
-    items:["Für EU-Praxis: ISO 16890 im Datenblatt maßgeblich (ePM-Werte).","Bei Bestellung: Druckverlust + Staubspeicherfähigkeit berücksichtigen."]
   });
 
   let enHint="—";
   const n=Number((id.match(/[0-9]{1,2}/)||[])[0]||0);
-  if(n<=8) enHint="G4-Bereich (Richtwert)";
-  if(n>=9 && n<=12) enHint="M5/M6-Bereich (Richtwert)";
-  if(n===13) enHint="F7-Bereich (Richtwert)";
-  if(n===14) enHint="F8-Bereich (Richtwert)";
-  if(n>=15) enHint="F9-Bereich (Richtwert)";
+  if(n<=8) enHint="G4-Bereich";
+  if(n>=9 && n<=12) enHint="M5/M6-Bereich";
+  if(n===13) enHint="F7-Bereich";
+  if(n===14) enHint="F8-Bereich";
+  if(n>=15) enHint="F9-Bereich";
 
   addCard({
-    title:"EN 779 (Bestand, Richtwert)",
-    badge:"Richtwert",
-    main:enHint,
-    items:["EN 779 abgekündigt, aber in Bestandsanlagen dokumentiert.","Altbezeichnungen: F5≈M5, F6≈M6."]
+    title:"EN 779 (Bestand)",
+    badge:"Vergleich",
+    main:enHint + " (Richtwert)",
+    ampelLevel:"green",
+    useTitle:"Wofür nutzt man das?",
+    useText:"Zum Abgleich mit Bestandsunterlagen/Filterrahmenbeschriftung.",
+    useHint:"EN 779 ist alt, aber in Bestandsanlagen üblich dokumentiert.",
+    items:["Altbezeichnungen: F5≈M5, F6≈M6."]
   });
 
   setPrintMeta(`MERV: ${id}`);
+}
+
+/* ========= Montagehilfe: Taschenfilter ========= */
+
+function mountCheck(){
+  const W = Number($("mW").value);
+  const H = Number($("mH").value);
+  const orient = $("mOrient").value;   // vertical/horizontal
+  const need = $("mNeed").value;       // hang/stand
+
+  if(!W || !H || W<50 || H<50){
+    $("mOut").innerHTML = "Bitte Breite und Höhe (mm) eingeben (z. B. 592 × 592).";
+    return;
+  }
+
+  // Heuristik (praxisnah):
+  // - Vertikal: Taschen sollen nach unten hängen → „Höhe“ ist die Richtung der Schwerkraft.
+  // - Horizontal: Taschen dürfen nicht aufliegen → besser so drehen, dass Taschen „seitlich“ frei hängen können.
+  // Annahme: Taschen benötigen eher die größere Rahmenrichtung als „Hänge-Richtung“.
+  const bigger = (H>=W) ? "H" : "W";
+  const smaller = (H>=W) ? "W" : "H";
+
+  let status = "ok"; // ok/warn/bad
+  let msg = "";
+  let tips = [];
+
+  tips.push("Immer den Luftstrom-Pfeil und ggf. „TOP/OBEN“ am Filter beachten.");
+  tips.push("Taschen dürfen nicht auf der Fläche aufliegen oder umknicken → müssen frei hängen/stehen.");
+
+  if(orient==="vertical"){
+    // Vertikal ist meistens unkritischer, weil Taschen nach unten hängen können.
+    status = "ok";
+    msg = `<b>Vertikal-Einbau:</b> In der Regel korrekt, wenn die Taschen <b>nach unten hängen</b> und nicht seitlich anstoßen.`;
+    tips.push("Achte auf ausreichenden Freiraum nach unten (kein Boden/Querträger direkt unter den Taschen).");
+    tips.push(`Wenn der Rahmen rechteckig ist: meist so einbauen, dass die <b>größere Abmessung</b> (${bigger==="H" ? "Höhe" : "Breite"}) die „Hänge-Richtung“ unterstützt (Taschen brauchen Platz).`);
+  } else {
+    // Horizontal kann kritisch sein: Taschen liegen ggf. auf.
+    status = "warn";
+    msg = `<b>Horizontal-Einbau:</b> Kritischer. Taschen können <b>aufliegen</b> und <b>umknicken</b> → Druckverlust steigt, Filter „zu“.`;
+    tips.push("Wenn möglich: Filter so montieren, dass Taschen nicht nach unten auf eine Fläche drücken (Taschen müssen frei hängen).");
+    tips.push("Oft ist vertikaler Einbau für Taschenfilter günstiger.");
+    tips.push(`Bei rechteckigem Rahmen: prüfe, ob Drehen des Rahmens hilft (damit Taschen mehr „Höhe“/Freiraum haben).`);
+
+    // Wenn „need=hang“ und horizontal → erhöhte Gefahr
+    if(need==="hang"){
+      status = "bad";
+      tips.push("Wenn die Taschen sichtbar aufliegen: Einbaulage ändern (vertikal) oder Rahmen drehen/anderer Filtertyp.");
+    }
+  }
+
+  // Zusatz-Heuristik anhand Seitenverhältnis:
+  const ratio = Math.max(W,H) / Math.min(W,H);
+  if(ratio >= 1.35){
+    // deutlich rechteckig → Orientierung wichtiger
+    tips.push("Rechteckiger Rahmen: Taschenrichtung besonders prüfen – falsche Lage führt häufiger zu Umknicken.");
+    if(orient==="horizontal") status = (status==="bad") ? "bad" : "warn";
+  }
+
+  let badge = "";
+  if(status==="ok") badge = `<span class="lamp g"></span> <b>OK</b> – geringe Knickgefahr`;
+  if(status==="warn") badge = `<span class="lamp y"></span> <b>Achtung</b> – Taschenlage prüfen`;
+  if(status==="bad") badge = `<span class="lamp r"></span> <b>Hohes Risiko</b> – Taschen knicken/liegen auf`;
+
+  $("mOut").innerHTML = `
+    <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap;">
+      <div class="ampel">${badge}</div>
+      <div style="color:var(--muted); font-size:12px;">
+        Maß: <span class="mono">${W} × ${H} mm</span> • Einbaulage: <b>${orient==="vertical" ? "Vertikal" : "Horizontal"}</b>
+      </div>
+    </div>
+    <div style="margin-top:8px; color:var(--text);">${msg}</div>
+    <div style="margin-top:10px; color:var(--muted); font-size:12px; line-height:1.45;">
+      <b>Praxis-Checkliste:</b>
+      <ul style="margin:6px 0 0; padding-left:18px;">
+        ${tips.map(t=>`<li>${t}</li>`).join("")}
+      </ul>
+    </div>
+  `;
 }
 
 /* ========= Wiring ========= */
@@ -626,7 +895,7 @@ function fillSelects(){
 }
 function updatePresetHint(){
   const p=PRESETS.find(x=>x.id===$("presetSel").value);
-  $("presetHint").textContent = p ? ("Preset-Hinweise: " + p.notes.join(" ")) : "";
+  $("presetHint").textContent = p ? ("Kurzinfo: " + p.notes.join(" ")) : "";
 }
 function applyFromUI(){
   const std=$("stdSelect").value;
@@ -666,6 +935,10 @@ function resetAll(){
   updatePresetHint();
   refreshMode();
   renderISO("ePM1",60);
+  $("mW").value=""; $("mH").value="";
+  $("mOrient").value="vertical";
+  $("mNeed").value="hang";
+  $("mOut").innerHTML = "Trage Maße ein und prüfe. Hinweis: <b>Luftstrom-Pfeil</b> und <b>Aufdruck „TOP“</b> am Filter immer beachten.";
 }
 
 $("stdSelect").addEventListener("change", refreshMode);
@@ -675,6 +948,14 @@ $("presetSel").addEventListener("change", updatePresetHint);
 $("presetApplyBtn").addEventListener("click", applyPreset);
 $("printBtn").addEventListener("click", ()=>window.print());
 $("quickInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter"){ e.preventDefault(); if(!applyQuick()) applyFromUI(); }});
+
+$("mCheckBtn").addEventListener("click", mountCheck);
+$("mResetBtn").addEventListener("click", ()=>{
+  $("mW").value=""; $("mH").value="";
+  $("mOrient").value="vertical";
+  $("mNeed").value="hang";
+  $("mOut").innerHTML = "Trage Maße ein und prüfe. Hinweis: <b>Luftstrom-Pfeil</b> und <b>Aufdruck „TOP“</b> am Filter immer beachten.";
+});
 
 fillSelects();
 updatePresetHint();
