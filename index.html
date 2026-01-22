@@ -4,13 +4,12 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Filterklassen-Vergleich | ISO 16890 • EN 779 • EN 1822 • MERV</title>
-  <meta name="description" content="Professioneller Filterklassen-Vergleich: ISO 16890, EN 779, EN 1822 (EPA/HEPA/ULPA) und ASHRAE 52.2 (MERV)."/>
   <style>
     :root{
-      --bg0:#070a12; --bg1:#0c1222; --card:rgba(255,255,255,.05);
-      --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.14);
+      --bg0:#070a12; --bg1:#0c1222; --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.18);
       --text:#eef2ff; --muted:#a9b3d6; --muted2:#8a95bb;
-      --accent:#7aa2ff; --accent2:#b7ffda; --warn:#ffd48a;
+      --accent:#7aa2ff; --ok:#b7ffda; --warn:#ffd48a;
       --shadow: 0 10px 35px rgba(0,0,0,.35);
       --radius:18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -23,14 +22,11 @@
                   radial-gradient(900px 600px at 90% 0%, rgba(183,255,218,.10), transparent 55%),
                   linear-gradient(180deg, var(--bg0), var(--bg1));
     }
-    a{ color:var(--accent); }
     .wrap{ max-width:1200px; margin:0 auto; padding:22px; }
-    header{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    .brand h1{ margin:0 0 6px; font-size:20px; letter-spacing:.2px; }
-    .brand p{ margin:0; color:var(--muted); font-size:13px; line-height:1.45; max-width:860px; }
+    header{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:14px; }
+    h1{ margin:0 0 6px; font-size:20px; letter-spacing:.2px; }
+    p{ margin:0; }
+    .sub{ color:var(--muted); font-size:13px; line-height:1.45; max-width:880px; }
     .pillrow{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .pill{
       display:inline-flex; gap:8px; align-items:center;
@@ -39,7 +35,7 @@
       backdrop-filter: blur(6px);
     }
     .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); display:inline-block; }
-    .dot.ok{ background:var(--accent2); }
+    .dot.ok{ background:var(--ok); }
     .dot.warn{ background:var(--warn); }
 
     .grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap:14px; }
@@ -50,13 +46,9 @@
       border-radius: var(--radius); box-shadow: var(--shadow);
       padding:14px;
     }
-    .card h2{ margin:0 0 10px; font-size:14px; color:var(--text); }
-    .muted{ color:var(--muted); }
-    .muted2{ color:var(--muted2); }
-
+    .card h2{ margin:0 0 10px; font-size:14px; }
     .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     @media (max-width: 680px){ .row{ grid-template-columns:1fr; } }
-
     label{ display:block; font-size:12px; color:var(--muted); margin:0 0 6px; }
     select,input,button{
       width:100%; padding:11px 11px; border-radius:14px;
@@ -65,67 +57,23 @@
     }
     input::placeholder{ color:rgba(169,179,214,.65); }
     select:focus,input:focus{ border-color: rgba(122,162,255,.55); box-shadow: 0 0 0 4px rgba(122,162,255,.12); }
+    button{ cursor:pointer; }
     .btn{
-      cursor:pointer; background:linear-gradient(180deg, rgba(122,162,255,.20), rgba(122,162,255,.10));
-      border-color: rgba(122,162,255,.35);
+      background:linear-gradient(180deg, rgba(122,162,255,.22), rgba(122,162,255,.10));
+      border-color: rgba(122,162,255,.40);
     }
-    .btn:hover{ filter:brightness(1.07); }
     .btn2{
-      cursor:pointer; background:linear-gradient(180deg, rgba(183,255,218,.14), rgba(183,255,218,.08));
+      background:linear-gradient(180deg, rgba(183,255,218,.16), rgba(183,255,218,.08));
       border-color: rgba(183,255,218,.30);
     }
-    .btn2:hover{ filter:brightness(1.07); }
     .btnGhost{
-      cursor:pointer;
       background:rgba(255,255,255,.04);
       border-color: rgba(255,255,255,.14);
     }
-    .btnGhost:hover{ filter:brightness(1.06); }
-
-    .seg{
-      display:flex; gap:8px; flex-wrap:wrap;
-      margin-top:8px;
-    }
-    .seg button{
-      width:auto; padding:8px 10px; border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid var(--line);
-      color:var(--muted);
-    }
-    .seg button.active{
-      background:rgba(122,162,255,.16);
-      border-color:rgba(122,162,255,.35);
-      color:var(--text);
-    }
+    .btn:hover, .btn2:hover, .btnGhost:hover{ filter:brightness(1.07); }
 
     .hr{ height:1px; background:var(--line); margin:12px 0; border:0; }
 
-    .resultGrid{
-      display:grid; grid-template-columns: 1fr; gap:10px;
-    }
-    .rCard{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.04);
-    }
-    .rTop{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-    .rTitle{ margin:0; font-size:13px; }
-    .badge{
-      font-size:11px; padding:4px 8px; border-radius:999px;
-      border:1px solid var(--line); color:var(--muted);
-      background:rgba(255,255,255,.03);
-      white-space:nowrap;
-      height: fit-content;
-    }
-    .mono{ font-family:var(--mono); }
-    .bigMono{
-      font-family:var(--mono);
-      font-size:16px;
-      letter-spacing:.2px;
-    }
-    .rBody{ margin-top:8px; }
-    .rBody ul{ margin:0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.45; }
     .hint{
       font-size:12px; color:var(--muted); line-height:1.45;
       background:rgba(255,255,255,.03);
@@ -133,28 +81,41 @@
       border-radius:16px;
       padding:10px;
     }
-
-    .footer{
-      margin-top:14px; font-size:12px; color:var(--muted);
-    }
-    .warnText{ color:var(--warn); }
-
+    .mono{ font-family:var(--mono); }
     .mini{ font-size:11px; color:var(--muted2); margin-top:6px; line-height:1.35; }
 
-    /* ===== Print Layout ===== */
+    .resultGrid{ display:grid; grid-template-columns: 1fr; gap:10px; }
+    .rCard{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:rgba(255,255,255,.04);
+    }
+    .rTop{ display:flex; justify-content:space-between; gap:10px; }
+    .badge{
+      font-size:11px; padding:4px 8px; border-radius:999px;
+      border:1px solid var(--line); color:var(--muted);
+      background:rgba(255,255,255,.03);
+      white-space:nowrap; height: fit-content;
+    }
+    .bigMono{ font-family:var(--mono); font-size:16px; letter-spacing:.2px; }
+    .rBody ul{ margin:0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.45; }
+
+    .footer{ margin-top:14px; font-size:12px; color:var(--muted); }
+    .warnText{ color:var(--warn); }
+
+    /* Print */
     @media print{
       body{ background:#fff !important; color:#111 !important; }
-      .wrap{ max-width:none; padding:0; }
       header, #leftPanel, #actionRow, #presetPanel { display:none !important; }
+      .wrap{ max-width:none; padding:0; }
       .grid{ grid-template-columns: 1fr !important; }
       .card{ background:#fff !important; border:1px solid #ddd !important; box-shadow:none !important; }
       .rCard{ background:#fff !important; border:1px solid #ddd !important; }
       .hint{ background:#fafafa !important; border:1px dashed #bbb !important; color:#333 !important; }
       .badge{ border:1px solid #ccc !important; color:#333 !important; background:#fafafa !important; }
-      .muted, .muted2, .warnText{ color:#333 !important; }
+      .warnText, .footer{ color:#333 !important; }
       #printHeader{ display:block !important; }
-      #rightPanelTitle{ margin-top:0 !important; }
-      a{ color:#111 !important; text-decoration:none !important; }
     }
     #printHeader{
       display:none;
@@ -168,230 +129,199 @@
     #printHeader .s{ font-size:12px; color:var(--muted); margin-top:4px; }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <h1>Filterklassen-Vergleich (Praxis) — ISO 16890 • EN 779 • EN 1822 • MERV</h1>
-        <p>
-          Norm auswählen → Klasse eingeben → Vergleichsbezeichnungen in anderen Normen ausgeben.
-          <b>ISO 16890 ↔ EN 779 ↔ MERV sind nur orientierende Zuordnungen</b> (unterschiedliche Prüfmethoden/Staub).
-          HEPA/EPA/ULPA (EN 1822) wird separat behandelt.
-        </p>
-      </div>
-      <div class="pillrow">
-        <span class="pill"><span class="dot ok"></span>Statische Seite</span>
-        <span class="pill"><span class="dot warn"></span>Vergleich = Richtwert</span>
-        <span class="pill mono">Beispiel: ePM1 60% ≈ „F7-Bereich“</span>
-      </div>
-    </header>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Filterklassen-Vergleich (Praxis) — ISO 16890 • EN 779 • EN 1822 • MERV</h1>
+      <p class="sub">
+        Norm auswählen → Klasse eingeben → Vergleichsbezeichnungen übersichtlich ausgeben.
+        <b>ISO 16890 ↔ EN 779 ↔ MERV ist nur orientierend</b> (unterschiedliche Prüfmethodik/Staub). HEPA/EPA/ULPA ist EN 1822.
+      </p>
+    </div>
+    <div class="pillrow">
+      <span class="pill"><span class="dot ok"></span>ohne externe Libraries</span>
+      <span class="pill"><span class="dot ok"></span>läuft offline</span>
+      <span class="pill"><span class="dot warn"></span>Vergleich = Richtwert</span>
+    </div>
+  </header>
 
-    <div class="grid">
-      <!-- LEFT -->
-      <section class="card" id="leftPanel">
-        <h2>Eingabe</h2>
+  <div class="grid">
+    <!-- LEFT -->
+    <section class="card" id="leftPanel">
+      <h2>Eingabe</h2>
 
+      <div class="row">
+        <div>
+          <label>Norm / Standard</label>
+          <select id="stdSelect">
+            <option value="iso16890">ISO 16890 (ePM…)</option>
+            <option value="en779">EN 779 (G/M/F – Bestand)</option>
+            <option value="en1822">EN 1822 (EPA/HEPA/ULPA)</option>
+            <option value="merv">ASHRAE 52.2 (MERV)</option>
+          </select>
+        </div>
+        <div>
+          <label>Schnelleingabe (Auto-Erkennung)</label>
+          <input id="quickInput" placeholder='z. B. "ePM1 60%", "F7", "F5", "H13", "MERV 13"' />
+          <div class="mini">Enter → erkennen & ausgeben</div>
+        </div>
+      </div>
+
+      <div class="row" id="isoBlock" style="margin-top:10px;">
+        <div>
+          <label>ISO 16890 Fraktion</label>
+          <select id="isoFrac">
+            <option value="ePM1">ePM1</option>
+            <option value="ePM25">ePM2,5</option>
+            <option value="ePM10">ePM10</option>
+            <option value="Coarse">Coarse</option>
+          </select>
+        </div>
+        <div>
+          <label>Abscheidegrad [%]</label>
+          <input id="isoPct" type="number" min="0" max="100" value="60"/>
+        </div>
+      </div>
+
+      <div class="row" id="en779Block" style="display:none; margin-top:10px;">
+        <div>
+          <label>EN 779 Klasse</label>
+          <select id="en779Sel"></select>
+        </div>
+        <div>
+          <label>Hinweis</label>
+          <div class="hint">Altunterlagen: <span class="mono">F5 ≈ M5</span> und <span class="mono">F6 ≈ M6</span>.</div>
+        </div>
+      </div>
+
+      <div class="row" id="en1822Block" style="display:none; margin-top:10px;">
+        <div>
+          <label>EN 1822 Klasse</label>
+          <select id="en1822Sel"></select>
+        </div>
+        <div>
+          <label>Praxis-Hinweis</label>
+          <div class="hint">EN 1822: MPPS + Leckage/Scan. In RLT meist <b>Endfilter</b> mit sauberen Vorstufen.</div>
+        </div>
+      </div>
+
+      <div class="row" id="mervBlock" style="display:none; margin-top:10px;">
+        <div>
+          <label>MERV</label>
+          <select id="mervSel"></select>
+        </div>
+        <div>
+          <label>Hinweis</label>
+          <div class="hint">MERV ↔ ISO 16890 nur orientierend. Maßgeblich sind ePM-Werte + Druckverlust aus dem Datenblatt.</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px;" id="actionRow">
+        <button class="btn" id="applyBtn">Vergleich anzeigen</button>
+        <button class="btnGhost" id="resetBtn">Zurücksetzen</button>
+      </div>
+
+      <hr class="hr"/>
+
+      <div class="hint">
+        <b>Erklärung:</b> <span class="mono">ePM1 60%</span> bedeutet: im ISO-Test ca. <b>60%</b> Abscheidung der <b>PM1-Fraktion</b> (≤ 1 µm).
+      </div>
+
+      <hr class="hr"/>
+
+      <div id="presetPanel">
+        <h2>Presets (typische Filterketten)</h2>
         <div class="row">
           <div>
-            <label>Norm / Standard</label>
-            <select id="stdSelect">
-              <option value="iso16890">ISO 16890 (ePM…)</option>
-              <option value="en779">EN 779 (G/M/F – Bestand)</option>
-              <option value="en1822">EN 1822 (EPA/HEPA/ULPA)</option>
-              <option value="merv">ASHRAE 52.2 (MERV)</option>
-            </select>
+            <label>Preset wählen</label>
+            <select id="presetSel"></select>
           </div>
           <div>
-            <label>Schnelleingabe (Auto-Erkennung)</label>
-            <input id="quickInput" placeholder='z. B. "ePM1 60%", "F7", "F5", "H13", "MERV 13"' />
-            <div class="mini">Enter drücken → automatisch erkennen & anzeigen</div>
+            <label>&nbsp;</label>
+            <button class="btn2" id="presetApplyBtn">Preset übernehmen</button>
           </div>
         </div>
+        <div class="mini" id="presetHint"></div>
+      </div>
+    </section>
 
-        <div class="seg" id="isoSeg" style="display:none;"></div>
+    <!-- RIGHT -->
+    <section class="card" id="rightPanel">
+      <div id="printHeader">
+        <div class="t">Filterklassen-Vergleich – Ergebnis</div>
+        <div class="s" id="printMeta"></div>
+      </div>
 
-        <div class="row" id="isoBlock" style="display:none; margin-top:10px;">
-          <div>
-            <label>ISO 16890 Fraktion</label>
-            <select id="isoFrac">
-              <option value="ePM1">ePM1</option>
-              <option value="ePM25">ePM2,5</option>
-              <option value="ePM10">ePM10</option>
-              <option value="Coarse">Coarse</option>
-            </select>
-          </div>
-          <div>
-            <label>Abscheidegrad [%]</label>
-            <input id="isoPct" type="number" min="0" max="100" value="60"/>
-          </div>
+      <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;">
+        <h2 style="margin:0;">Vergleichsfilter (andere Normen)</h2>
+        <button class="btnGhost" id="printBtn" style="width:auto; padding:9px 12px;">Drucken / PDF</button>
+      </div>
+
+      <div id="summary" class="hint" style="margin:10px 0;">
+        Wähle links eine Norm/Klasse oder nutze die Schnelleingabe.
+      </div>
+      <div class="resultGrid" id="results"></div>
+
+      <div class="footer">
+        <div class="warnText">
+          <b>Wichtig:</b> EN 779 ↔ ISO 16890 ↔ MERV ist Richtwert. Für Bestellung: Hersteller-Datenblatt/Prüfbericht + Anlagenanforderung (Hygiene, Außenluft, Druckverlust, Dichtheit).
         </div>
-
-        <div class="row" id="en779Block" style="display:none; margin-top:10px;">
-          <div>
-            <label>EN 779 Klasse</label>
-            <select id="en779Sel"></select>
-          </div>
-          <div>
-            <label>Hinweis</label>
-            <div class="hint">
-              Altunterlagen: <span class="mono">F5 ≈ M5</span> und <span class="mono">F6 ≈ M6</span>.
-            </div>
-          </div>
-        </div>
-
-        <div class="row" id="en1822Block" style="display:none; margin-top:10px;">
-          <div>
-            <label>EN 1822 Klasse</label>
-            <select id="en1822Sel"></select>
-          </div>
-          <div>
-            <label>Praxis-Hinweis</label>
-            <div class="hint">
-              EN 1822: MPPS + Leckage/Scan. In RLT meist <b>Endfilter</b> mit sauberen Vorstufen.
-            </div>
-          </div>
-        </div>
-
-        <div class="row" id="mervBlock" style="display:none; margin-top:10px;">
-          <div>
-            <label>MERV</label>
-            <select id="mervSel"></select>
-          </div>
-          <div>
-            <label>Hinweis</label>
-            <div class="hint">
-              MERV ↔ ISO 16890 ist <b>nur orientierend</b>. Maßgeblich sind ePM-Werte & Druckverlust aus dem Datenblatt.
-            </div>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:10px;" id="actionRow">
-          <button class="btn" id="applyBtn">Vergleich anzeigen</button>
-          <button class="btnGhost" id="resetBtn">Zurücksetzen</button>
-        </div>
-
-        <hr class="hr"/>
-
-        <div class="hint">
-          <b>Was bedeutet ePM1 60%?</b><br/>
-          Der Filter erreicht im ISO-Test im Mittel ca. <b>60%</b> Abscheidung für die <b>PM1-Fraktion</b> (≤ 1 µm).
-        </div>
-
-        <hr class="hr"/>
-
-        <div id="presetPanel">
-          <h2>Presets (typische Filterketten)</h2>
-          <div class="row">
-            <div>
-              <label>Preset wählen</label>
-              <select id="presetSel"></select>
-            </div>
-            <div>
-              <label>&nbsp;</label>
-              <button class="btn2" id="presetApplyBtn">Preset übernehmen</button>
-            </div>
-          </div>
-          <div class="mini" id="presetHint"></div>
-        </div>
-      </section>
-
-      <!-- RIGHT -->
-      <section class="card" id="rightPanel">
-        <div id="printHeader">
-          <div class="t">Filterklassen-Vergleich – Ergebnis</div>
-          <div class="s" id="printMeta"></div>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;">
-          <h2 id="rightPanelTitle" style="margin:0;">Vergleichsfilter (andere Normen)</h2>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="btnGhost" id="printBtn" style="width:auto; padding:9px 12px;">Drucken / PDF</button>
-          </div>
-        </div>
-
-        <div id="summary" class="hint" style="margin:10px 0;">
-          Wähle links eine Norm/Klasse oder nutze die Schnelleingabe.
-        </div>
-        <div class="resultGrid" id="results"></div>
-
-        <div class="footer">
-          <div class="warnText">
-            <b>Wichtig:</b> EN 779 ↔ ISO 16890 ↔ MERV ist eine Richtwert-Zuordnung.
-            Für Ausschreibung/Bestellung: Herstellerdatenblatt/Prüfbericht + Anlagenanforderung (Hygiene, Außenluft, Druckverlust, Dichtheit).
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
+</div>
 
 <script>
-/* =======================
-   Daten (praxisorientiert)
-   ======================= */
+/* ========= Daten ========= */
 
+// EN 779 (Bestand) inkl. Alias
 const EN779 = [
-  { id:"G4", label:"G4", stage:"Vorfilter", notes:[
-    "Vorfilter/Anlagenschutz, verlängert Standzeit der Feinfilter.",
-    "Heute häufig als ISO Coarse bezeichnet (Richtwert)."
-  ]},
-  { id:"M5", label:"M5 (ehem. F5)", alias:["F5","M5"], stage:"Mittelfilter", notes:[
-    "Mittelfilter / Schutzstufe vor Feinfiltern.",
-    "In Bestandsunterlagen oft als F5 geführt."
-  ]},
-  { id:"M6", label:"M6 (ehem. F6)", alias:["F6","M6"], stage:"Mittelfilter", notes:[
-    "Bessere Vorstufe vor F7/F9, in Altunterlagen als F6.",
-  ]},
-  { id:"F7", label:"F7", stage:"Feinfilter (Zuluft)", notes:[
-    "Häufiger Zuluft-Feinfilter (Büro/Lehre, je nach Konzept).",
-    "Praxis: ePM1 60% liegt häufig im F7-Überlappungsbereich."
-  ]},
-  { id:"F8", label:"F8", stage:"Feinfilter (hoch)", notes:[
-    "Höhere Feinstaubabscheidung, z. B. Stadtlage/hohe Außenluftbelastung."
-  ]},
-  { id:"F9", label:"F9", stage:"Feinfilter (sehr hoch)", notes:[
-    "Sehr hohe Feinabscheidung, oft vor HEPA-Endfiltern oder anspruchsvoller Zuluft."
-  ]},
+  { id:"G4", label:"G4", stage:"Vorfilter", notes:["Vorfilter/Anlagenschutz, verlängert Standzeit der Feinfilter.","Heute häufig als ISO Coarse bezeichnet (Richtwert)."]},
+  { id:"M5", label:"M5 (ehem. F5)", alias:["F5","M5"], stage:"Mittelfilter", notes:["Mittelfilter / Schutzstufe vor Feinfiltern.","In Bestandsunterlagen oft als F5 geführt."]},
+  { id:"M6", label:"M6 (ehem. F6)", alias:["F6","M6"], stage:"Mittelfilter", notes:["Bessere Vorstufe vor F7/F9, in Altunterlagen als F6."]},
+  { id:"F7", label:"F7", stage:"Feinfilter (Zuluft)", notes:["Häufiger Zuluft-Feinfilter (Büro/Lehre, je nach Konzept).","Praxis: ePM1 60% liegt häufig im F7-Überlappungsbereich."]},
+  { id:"F8", label:"F8", stage:"Feinfilter (hoch)", notes:["Höhere Feinstaubabscheidung, z. B. Stadtlage/hohe Außenluftbelastung."]},
+  { id:"F9", label:"F9", stage:"Feinfilter (sehr hoch)", notes:["Sehr hohe Feinabscheidung, oft vor HEPA-Endfiltern oder anspruchsvoller Zuluft."]},
 ];
 
 const ISO_FRAC_DESC = {
   ePM1:  "Feinstpartikel ≤ 1 µm (Feinstaub/Verbrennungsrauch, sehr feine Aerosole).",
   ePM25: "Feinstaub ≤ 2,5 µm (gesundheitlich relevant, städtische Außenluft).",
-  ePM10: "≤ 10 µm (Pollen, gröbere Stäube, viele Schwebstoffe).",
+  ePM10: "≤ 10 µm (Pollen, gröbere Stäube, Schwebstoffe).",
   Coarse:"Grob > 10 µm (Vorfilter/Anlagenschutz, Standzeit)."
 };
 
-const EN779_TO_ISO_HINT = {
-  G4:   { iso:["ISO Coarse 60–80% (Richtwert)"], merv:["MERV 6–8 (Richtwert)"] },
-  M5:   { iso:["ISO ePM10 50–70% (typisch)"],    merv:["MERV 9–10 (Richtwert)"] },
-  M6:   { iso:["ISO ePM10 60–80% (typisch)"],    merv:["MERV 10–12 (Richtwert)"] },
-  F7:   { iso:["ISO ePM1 55–65% (typisch)"],     merv:["MERV 13 (Richtwert)"] },
-  F8:   { iso:["ISO ePM1 70–85% (typisch)"],     merv:["MERV 14 (Richtwert)"] },
-  F9:   { iso:["ISO ePM1 80–90% (typisch)"],     merv:["MERV 15 (Richtwert)"] },
+// Richtwert-Zuordnung (praxisnah)
+const EN779_TO_HINT = {
+  G4: { iso:["ISO Coarse 60–80% (Richtwert)"], merv:["MERV 6–8 (Richtwert)"] },
+  M5: { iso:["ISO ePM10 50–70% (typisch)"],    merv:["MERV 9–10 (Richtwert)"] },
+  M6: { iso:["ISO ePM10 60–80% (typisch)"],    merv:["MERV 10–12 (Richtwert)"] },
+  F7: { iso:["ISO ePM1 55–65% (typisch)"],     merv:["MERV 13 (Richtwert)"] },
+  F8: { iso:["ISO ePM1 70–85% (typisch)"],     merv:["MERV 14 (Richtwert)"] },
+  F9: { iso:["ISO ePM1 80–90% (typisch)"],     merv:["MERV 15 (Richtwert)"] },
 };
 
 function isoToEn779(frac, pct){
   pct = Number(pct);
   const hits = [];
-  if(frac === "Coarse"){
-    hits.push("G4");
+  if(frac==="Coarse"){ hits.push("G4"); }
+  if(frac==="ePM10"){
+    if(pct>=50 && pct<=70) hits.push("M5");
+    if(pct>=60) hits.push("M6");
+    if(pct>=80) hits.push("F7");
   }
-  if(frac === "ePM10"){
-    if(pct >= 60) hits.push("M6");
-    if(pct >= 50 && pct <= 70) hits.push("M5");
-    if(pct >= 80) hits.push("F7");
+  if(frac==="ePM25"){
+    if(pct<65 && pct>=35) hits.push("M6");
+    if(pct>=65) hits.push("F7");
+    if(pct>=75) hits.push("F8");
+    if(pct>=85) hits.push("F9");
   }
-  if(frac === "ePM25"){
-    if(pct >= 65) hits.push("F7");
-    if(pct >= 75) hits.push("F8");
-    if(pct >= 85) hits.push("F9");
-    if(pct >= 35 && pct < 65) hits.push("M6");
-  }
-  if(frac === "ePM1"){
-    if(pct >= 40 && pct <= 65) hits.push("F7");
-    if(pct >= 65 && pct <= 90) hits.push("F8");
-    if(pct >= 80) hits.push("F9");
-    if(pct < 40) hits.push("M6");
+  if(frac==="ePM1"){
+    if(pct<40) hits.push("M6");
+    if(pct>=40 && pct<=65) hits.push("F7");
+    if(pct>=65 && pct<=90) hits.push("F8");
+    if(pct>=80) hits.push("F9");
   }
   return [...new Set(hits)];
 }
@@ -407,7 +337,7 @@ const MERV = [
 
 const EN1822 = [
   { id:"E10 (EPA)",  eff:"≥ 85% (MPPS)",       use:"Vorstufe vor HEPA, Technik/Prozess je nach Konzept" },
-  { id:"E11 (EPA)",  eff:"≥ 95% (MPPS)",       use:"Vorstufe für H13/H14 oder Endstufe in weniger kritischen Anwendungen" },
+  { id:"E11 (EPA)",  eff:"≥ 95% (MPPS)",       use:"Vorstufe für H13/H14 oder Endstufe weniger kritisch" },
   { id:"E12 (EPA)",  eff:"≥ 99,5% (MPPS)",     use:"hochwirksame Vorstufe, Prozess/Hygiene" },
   { id:"H13 (HEPA)", eff:"≥ 99,95% (MPPS)",    use:"typischer HEPA-Endfilter, Labor/Klinik je nach Konzept" },
   { id:"H14 (HEPA)", eff:"≥ 99,995% (MPPS)",   use:"sehr hohe Anforderungen, kritische Bereiche/Reinraum" },
@@ -416,498 +346,340 @@ const EN1822 = [
   { id:"U17 (ULPA)", eff:"≥ 99,999995% (MPPS)",use:"Reinraum/High-End-Prozess" },
 ];
 
-// Presets (typische Ketten) → setzen eine Eingabe + ergänzen eine Ketten-Karte in der Ausgabe
 const PRESETS = [
   {
     id:"office_std",
     name:"Büro/Lehre – Standard (2-stufig)",
-    apply: { std:"iso16890", iso:{ frac:"ePM1", pct:60 } },
+    apply:{ std:"iso16890", iso:{ frac:"ePM1", pct:60 } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 60–70% (≈ Bestand G4)" },
       { stage:"Feinfilter", value:"ISO ePM1 55–65% (≈ F7)" }
     ],
-    notes:[
-      "Guter Standard-Aufbau: Standzeit/Schutz + Feinstaubabscheidung.",
-      "Wenn Außenluft belastet: eher ePM1 ~70–85% (≈ F8)."
-    ]
+    notes:["Guter Standard-Aufbau: Standzeit/Schutz + Feinstaubabscheidung.","Bei belasteter Außenluft: eher ePM1 70–85% (≈ F8)."]
   },
   {
     id:"office_city",
     name:"Büro – Stadtlage/hohe Außenluftbelastung",
-    apply: { std:"iso16890", iso:{ frac:"ePM1", pct:80 } },
+    apply:{ std:"iso16890", iso:{ frac:"ePM1", pct:80 } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 70–80%" },
       { stage:"Feinfilter", value:"ISO ePM1 70–85% (≈ F8)" }
     ],
-    notes:[
-      "Höhere Feinstaubabscheidung, dafür oft mehr Druckverlust.",
-      "Ventilatorreserve/Filterauslegung prüfen."
-    ]
+    notes:["Höhere Feinstaubabscheidung, dafür oft mehr Druckverlust.","Ventilatorreserve/Filterauslegung prüfen."]
   },
   {
     id:"lab_general",
     name:"Labor allgemein – ohne Reinraum (2–3-stufig)",
-    apply: { std:"en779", en779:{ cls:"F9" } },
+    apply:{ std:"en779", en779:{ cls:"F9" } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 70–80%" },
       { stage:"Feinfilter", value:"ISO ePM1 80–90% (≈ F9)" },
       { stage:"Option", value:"EPA/HEPA nur nach Konzept/Anforderung (z. B. H13)" }
     ],
-    notes:[
-      "Viele Labore brauchen nicht automatisch HEPA – Prozess/Hygiene-Konzept entscheidet.",
-      "Wenn HEPA: Vorstufen sauber halten (sonst kurze Standzeit)."
-    ]
+    notes:["Viele Labore brauchen nicht automatisch HEPA – Konzept entscheidet.","Wenn HEPA: Vorstufen sauber halten (sonst kurze Standzeit)."]
   },
   {
     id:"hepa_end",
     name:"HEPA-Endstufe (H13) – typische Kette",
-    apply: { std:"en1822", en1822:{ id:"H13 (HEPA)" } },
+    apply:{ std:"en1822", en1822:{ id:"H13 (HEPA)" } },
     chain:[
       { stage:"Vorfilter", value:"ISO Coarse 70–80%" },
       { stage:"Feinfilter", value:"ISO ePM1 80–90% (≈ F9)" },
       { stage:"Endfilter", value:"H13 (HEPA) – EN 1822" }
     ],
-    notes:[
-      "HEPA ist Endfilter: Dichtheit/Bypass/Einbau ist kritisch.",
-      "Wechselkriterium meist über Druckverlust + ggf. Monitoring nach Konzept."
-    ]
+    notes:["HEPA ist Endfilter: Dichtheit/Bypass/Einbau kritisch.","Wechsel oft über Druckverlust + ggf. Monitoring nach Konzept."]
   }
 ];
 
-/* ===========
-   UI Helpers
-   =========== */
-const el = (id)=>document.getElementById(id);
-function setVisible(id, show){ el(id).style.display = show ? "" : "none"; }
-function setSummary(html){ el("summary").innerHTML = html; }
-function clearResults(){ el("results").innerHTML = ""; }
-function addResultCard({title, badge, main, items, note}){
-  const div = document.createElement("div");
-  div.className = "rCard";
-  div.innerHTML = `
+/* ========= UI Helpers ========= */
+const $ = (id)=>document.getElementById(id);
+function show(id, on){ $(id).style.display = on ? "" : "none"; }
+function setSummary(html){ $("summary").innerHTML = html; }
+function clearResults(){ $("results").innerHTML = ""; }
+function addCard({title,badge,main,items,note}){
+  const div=document.createElement("div");
+  div.className="rCard";
+  div.innerHTML=`
     <div class="rTop">
       <div>
-        <div class="rTitle"><b>${title}</b></div>
-        <div class="bigMono">${main || ""}</div>
+        <div><b>${title}</b></div>
+        <div class="bigMono">${main||""}</div>
       </div>
-      <div class="badge">${badge || ""}</div>
+      <div class="badge">${badge||""}</div>
     </div>
     <div class="rBody">
       ${items && items.length ? `<ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul>` : ""}
       ${note ? `<div class="hint" style="margin-top:10px">${note}</div>` : ""}
     </div>
   `;
-  el("results").appendChild(div);
+  $("results").appendChild(div);
 }
-function normalizeQuick(str){ return (str||"").trim().replace(/\s+/g," ").toUpperCase(); }
+function setPrintMeta(text){
+  const dt=new Date().toLocaleString("de-DE");
+  $("printMeta").textContent = `${text} • erstellt: ${dt}`;
+}
 
-function parseQuickInput(q){
-  const s = normalizeQuick(q);
-  // ISO: "EPM1 60%", "EPM2,5 70", "COARSE 70"
-  let m = s.match(/(EPM1|EPM2,5|EPM25|EPM10|COARSE)\s*([0-9]{1,3})\s*%?/);
+/* ========= Parsing Quick Input ========= */
+function normQ(s){ return (s||"").trim().replace(/\s+/g," ").toUpperCase(); }
+function parseQuick(q){
+  const s=normQ(q);
+
+  let m=s.match(/(EPM1|EPM2,5|EPM25|EPM10|COARSE)\s*([0-9]{1,3})\s*%?/);
   if(m){
-    let frac = m[1];
-    if(frac === "EPM2,5" || frac === "EPM25") frac = "ePM25";
-    else if(frac === "EPM1") frac = "ePM1";
-    else if(frac === "EPM10") frac = "ePM10";
-    else if(frac === "COARSE") frac = "Coarse";
-    const pct = Math.min(100, Math.max(0, Number(m[2])));
-    return { std:"iso16890", iso:{ frac, pct } };
+    let frac=m[1];
+    if(frac==="EPM1") frac="ePM1";
+    else if(frac==="EPM10") frac="ePM10";
+    else if(frac==="EPM2,5"||frac==="EPM25") frac="ePM25";
+    else frac="Coarse";
+    const pct=Math.max(0,Math.min(100,Number(m[2])));
+    return {std:"iso16890", iso:{frac,pct}};
   }
-  // EN 779: G4 F5 F6 F7 F8 F9 M5 M6
-  m = s.match(/\b(G4|F5|F6|F7|F8|F9|M5|M6)\b/);
+
+  m=s.match(/\b(G4|F5|F6|F7|F8|F9|M5|M6)\b/);
   if(m){
-    const tok = m[1];
-    let cls = tok;
-    if(tok === "F5") cls = "M5";
-    if(tok === "F6") cls = "M6";
-    return { std:"en779", en779:{ cls } };
+    let cls=m[1];
+    if(cls==="F5") cls="M5";
+    if(cls==="F6") cls="M6";
+    return {std:"en779", en779:{cls}};
   }
-  // EN 1822: E10/E11/E12/H13/H14/U15/U16/U17
-  m = s.match(/\b(E10|E11|E12|H13|H14|U15|U16|U17)\b/);
+
+  m=s.match(/\b(E10|E11|E12|H13|H14|U15|U16|U17)\b/);
   if(m){
-    const code = m[1];
-    const label = EN1822.find(x=>x.id.startsWith(code))?.id || (code+" (EN 1822)");
-    return { std:"en1822", en1822:{ id: label } };
+    const code=m[1];
+    const id = EN1822.find(x=>x.id.startsWith(code))?.id || (code+" (EN 1822)");
+    return {std:"en1822", en1822:{id}};
   }
-  // MERV
-  m = s.match(/\bMERV\s*([0-9]{1,2})\b/);
-  if(m){
-    const n = Number(m[1]);
-    return { std:"merv", merv:{ id:`MERV ${n}` } };
-  }
+
+  m=s.match(/\bMERV\s*([0-9]{1,2})\b/);
+  if(m) return {std:"merv", merv:{id:`MERV ${Number(m[1])}`}};
+
   return null;
 }
 
-/* ===========
-   Renderers
-   =========== */
-
-function renderChainCard(chain, notes){
-  const rows = chain.map(x=>`<li><b>${x.stage}:</b> <span class="mono">${x.value}</span></li>`).join("");
-  const n = (notes||[]).map(x=>`<li>${x}</li>`).join("");
-  addResultCard({
+/* ========= Rendering ========= */
+function renderChain(p){
+  const rows = p.chain.map(x=>`<li><b>${x.stage}:</b> <span class="mono">${x.value}</span></li>`).join("");
+  const notes = p.notes.map(x=>`<li>${x}</li>`).join("");
+  addCard({
     title:"Preset: typische Filterkette",
     badge:"Praxis",
     main:"",
-    items: [],
-    note: `
-      <div style="font-size:12px; color:var(--muted); line-height:1.45;">
-        <ul style="margin:0; padding-left:18px;">${rows}</ul>
-        ${notes && notes.length ? `<div style="margin-top:10px;"><b>Hinweise:</b><ul style="margin:6px 0 0; padding-left:18px;">${n}</ul></div>` : ""}
-      </div>
-    `
+    items:[],
+    note:`<ul style="margin:0; padding-left:18px; color:var(--muted); font-size:12px; line-height:1.45;">${rows}</ul>
+          <div style="margin-top:10px; font-size:12px; color:var(--muted);"><b>Hinweise:</b>
+          <ul style="margin:6px 0 0; padding-left:18px;">${notes}</ul></div>`
   });
 }
 
-function renderForISO(frac, pct, presetObj=null){
+function renderISO(frac,pct,preset=null){
   clearResults();
-  const pctN = Number(pct);
-  const fracLabel = frac === "ePM25" ? "ePM2,5" : frac;
-  setSummary(`
-    Eingabe: <b class="mono">${fracLabel} ${pctN}%</b><br/>
-    <span class="muted">Interpretation: ${ISO_FRAC_DESC[frac] || ""}</span>
-  `);
+  const pctN=Number(pct);
+  const fracLabel = (frac==="ePM25") ? "ePM2,5" : frac;
 
-  if(presetObj) renderChainCard(presetObj.chain, presetObj.notes);
+  setSummary(`Eingabe: <b class="mono">${fracLabel} ${pctN}%</b><br><span class="muted">${ISO_FRAC_DESC[frac]||""}</span>`);
+  if(preset) renderChain(preset);
 
-  const enCandidates = isoToEn779(frac, pctN);
-  const enText = enCandidates.length ? enCandidates.map(id => EN779.find(x=>x.id===id)?.label || id) : ["—"];
-  addResultCard({
+  const cand = isoToEn779(frac,pctN);
+  const candText = cand.length ? cand.map(id=>EN779.find(x=>x.id===id)?.label||id).join(" · ") : "—";
+
+  addCard({
     title:"EN 779 (Bestand)",
     badge:"Richtwert",
-    main: enText.join("  ·  "),
+    main:candText,
     items:[
-      "EN 779 ist abgekündigt, aber in Bestandsunterlagen verbreitet.",
-      "Für Bestellung zählt das Datenblatt (ePM-Werte, Druckverlust, Dichtheit)."
+      "EN 779 ist abgekündigt, taucht aber in Bestandsunterlagen auf.",
+      "Für Auswahl/Bestellung: Datenblatt (ePM-Werte, Druckverlust, Dichtheit) prüfen."
     ],
-    note: (enCandidates.includes("F7") && frac==="ePM1" && pctN>=55 && pctN<=65)
-      ? "Praxis: <b>ePM1 60%</b> liegt häufig im <b>F7</b>-Überlappungsbereich."
-      : ""
+    note:(frac==="ePM1" && pctN>=55 && pctN<=65) ? "Praxis: <b>ePM1 60%</b> liegt häufig im <b>F7-Bereich</b>." : ""
   });
 
-  let mervHint = [];
-  if(frac==="ePM1"){
-    if(pctN>=50 && pctN<70) mervHint = ["MERV 13 (Richtwert)"];
-    if(pctN>=70 && pctN<85) mervHint = ["MERV 14 (Richtwert)"];
-    if(pctN>=85 && pctN<95) mervHint = ["MERV 15 (Richtwert)"];
-    if(pctN>=95) mervHint = ["MERV 16 (Richtwert)"];
-    if(pctN<50) mervHint = ["MERV 11–12 (Richtwert)"];
-  } else if(frac==="ePM10"){
-    if(pctN>=50 && pctN<70) mervHint = ["MERV 9–10 (Richtwert)"];
-    if(pctN>=70) mervHint = ["MERV 11–12 (Richtwert)"];
-    if(pctN<50) mervHint = ["MERV 8 (Richtwert)"];
-  } else if(frac==="Coarse"){
-    mervHint = ["MERV 6–8 (Richtwert)"];
-  } else {
-    mervHint = ["MERV 11–14 (Richtwert, abhängig vom Filtertyp)"];
-  }
+  // MERV grob
+  let mervHint="MERV 11–14 (Richtwert)";
+  if(frac==="Coarse") mervHint="MERV 6–8 (Richtwert)";
+  if(frac==="ePM10" && pctN<50) mervHint="MERV 8 (Richtwert)";
+  if(frac==="ePM10" && pctN>=50 && pctN<70) mervHint="MERV 9–10 (Richtwert)";
+  if(frac==="ePM1" && pctN>=50 && pctN<70) mervHint="MERV 13 (Richtwert)";
+  if(frac==="ePM1" && pctN>=70 && pctN<85) mervHint="MERV 14 (Richtwert)";
+  if(frac==="ePM1" && pctN>=85 && pctN<95) mervHint="MERV 15 (Richtwert)";
+  if(frac==="ePM1" && pctN>=95) mervHint="MERV 16 (Richtwert)";
 
-  addResultCard({
+  addCard({
     title:"ASHRAE 52.2 (MERV)",
     badge:"Richtwert",
-    main: mervHint.join("  ·  "),
-    items:[
-      "MERV basiert auf anderer Methodik als ISO 16890.",
-      "Als Vergleich hilfreich – aber nicht als harte Umrechnung."
-    ]
+    main:mervHint,
+    items:["MERV basiert auf anderer Methodik als ISO 16890.","Als Vergleich hilfreich – keine harte Umrechnung."]
   });
 
-  addResultCard({
+  addCard({
     title:"EN 1822 (EPA/HEPA/ULPA)",
     badge:"separat",
     main:"E10–E12 / H13–H14 / U15–U17",
-    items:[
-      "Hochleistungsfilter: MPPS + Leckageprüfung.",
-      "Bei HEPA in RLT: Vorstufen (Coarse + Feinfilter hoch) sind entscheidend."
-    ]
+    items:["Hochleistungsfilter: MPPS + Leckageprüfung.","Bei HEPA in RLT: Vorstufen (Coarse + Feinfilter hoch) sind entscheidend."]
   });
 
   setPrintMeta(`ISO 16890: ${fracLabel} ${pctN}%`);
 }
 
-function renderForEN779(cls, presetObj=null){
+function renderEN779(cls,preset=null){
   clearResults();
-  const obj = EN779.find(x=>x.id===cls);
-  setSummary(`
-    Eingabe: <b class="mono">${obj ? obj.label : cls}</b><br/>
-    <span class="muted">Stufe: ${obj?.stage || "—"} • ${obj?.notes?.[0] || ""}</span>
-  `);
+  const obj=EN779.find(x=>x.id===cls);
+  setSummary(`Eingabe: <b class="mono">${obj?obj.label:cls}</b><br><span class="muted">Stufe: ${obj?.stage||"—"}</span>`);
+  if(preset) renderChain(preset);
 
-  if(presetObj) renderChainCard(presetObj.chain, presetObj.notes);
-
-  const hints = EN779_TO_ISO_HINT[cls];
-  addResultCard({
+  const h=EN779_TO_HINT[cls];
+  addCard({
     title:"ISO 16890",
     badge:"Richtwert",
-    main: (hints?.iso || ["—"]).join("  ·  "),
-    items:[
-      "ISO 16890 ist die aktuelle Klassifikation (ePM-Fraktionen).",
-      "Konkrete ePM-Werte (PM1/PM2,5/PM10) je nach Hersteller prüfen."
-    ]
+    main:(h?.iso||["—"]).join(" · "),
+    items:["ISO 16890 ist die aktuelle Klassifikation (ePM-Fraktionen).","Konkrete ePM-Werte je Hersteller prüfen."]
   });
-
-  addResultCard({
+  addCard({
     title:"ASHRAE 52.2 (MERV)",
     badge:"Richtwert",
-    main: (hints?.merv || ["—"]).join("  ·  "),
-    items:[
-      "Nützlich bei internationalen Vergleichen (US-Bezug).",
-      "Technisch maßgeblich: Druckverlust, Standzeit, Dichtheit, Datenblatt."
-    ]
+    main:(h?.merv||["—"]).join(" · "),
+    items:["Hilfreich bei US-Bezug/International.","Technisch maßgeblich: Druckverlust, Standzeit, Dichtheit, Datenblatt."]
   });
-
-  addResultCard({
+  addCard({
     title:"Praxisnotizen",
-    badge: obj?.stage || "",
-    main: obj ? obj.id : cls,
-    items: obj?.notes || [],
-    note: (cls==="M5"||cls==="M6")
-      ? "Bestand: <b>F5 ↔ M5</b> und <b>F6 ↔ M6</b> sind häufige Altbezeichnungen."
-      : ""
+    badge:obj?.stage||"",
+    main:obj?obj.id:cls,
+    items:obj?.notes||[],
+    note:(cls==="M5"||cls==="M6") ? "Altbezeichnungen: <b>F5 ↔ M5</b>, <b>F6 ↔ M6</b>." : ""
   });
 
-  setPrintMeta(`EN 779: ${obj ? obj.label : cls}`);
+  setPrintMeta(`EN 779: ${obj?obj.label:cls}`);
 }
 
-function renderForEN1822(id, presetObj=null){
+function renderEN1822(id,preset=null){
   clearResults();
-  const obj = EN1822.find(x=>x.id===id) || EN1822.find(x=>x.id.startsWith(id));
-  setSummary(`
-    Eingabe: <b class="mono">${obj?.id || id}</b><br/>
-    <span class="muted">Mindestwirkungsgrad: ${obj?.eff || "—"} • Einsatz: ${obj?.use || ""}</span>
-  `);
+  const obj=EN1822.find(x=>x.id===id) || EN1822.find(x=>x.id.startsWith(id));
+  setSummary(`Eingabe: <b class="mono">${obj?.id||id}</b><br><span class="muted">Mindestwirkungsgrad: ${obj?.eff||"—"} • ${obj?.use||""}</span>`);
+  if(preset) renderChain(preset);
 
-  if(presetObj) renderChainCard(presetObj.chain, presetObj.notes);
-
-  addResultCard({
+  addCard({
     title:"EN 1822 Klasse",
     badge:"Endfilter",
-    main: obj?.id || id,
-    items:[
-      `Mindestwirkungsgrad: <span class="mono">${obj?.eff || "—"}</span>`,
-      obj?.use || "—"
-    ],
+    main:obj?.id||id,
+    items:[`Mindestwirkungsgrad: <span class="mono">${obj?.eff||"—"}</span>`, obj?.use||"—"],
     note:"Praxis: <b>Dichtheit im Einbau</b> (Bypass/Leckage) ist genauso wichtig wie die Filterklasse."
   });
-
-  addResultCard({
-    title:"Vergleich zu ISO/EN779/MERV",
+  addCard({
+    title:"Vergleich zu ISO/EN 779/MERV",
     badge:"Hinweis",
     main:"keine direkte Umrechnung",
-    items:[
-      "HEPA/EPA/ULPA haben eigene Normlogik (MPPS/Leckage).",
-      "RLT-Kette: Vorfilter (ISO Coarse) + Feinfilter (ePM1 hoch/F9-Bereich) vor HEPA."
-    ]
+    items:["HEPA/EPA/ULPA haben eigene Normlogik (MPPS/Leckage).","RLT-Kette: Vorfilter + Feinfilter (hoch) vor HEPA."]
   });
 
-  setPrintMeta(`EN 1822: ${obj?.id || id}`);
+  setPrintMeta(`EN 1822: ${obj?.id||id}`);
 }
 
-function renderForMERV(id, presetObj=null){
+function renderMERV(id,preset=null){
   clearResults();
-  const obj = MERV.find(x=>x.id===id) || null;
-  setSummary(`
-    Eingabe: <b class="mono">${id}</b><br/>
-    <span class="muted">Hinweis: Vergleich zu ISO/EN 779 ist orientierend.</span>
-  `);
+  const obj=MERV.find(x=>x.id===id);
+  setSummary(`Eingabe: <b class="mono">${id}</b><br><span class="muted">Vergleich zu ISO/EN 779 nur orientierend.</span>`);
+  if(preset) renderChain(preset);
 
-  if(presetObj) renderChainCard(presetObj.chain, presetObj.notes);
-
-  addResultCard({
+  addCard({
     title:"ASHRAE 52.2 (MERV)",
     badge:"US-Bezug",
-    main: id,
-    items:[
-      obj ? `ISO-Richtwert: <span class="mono">${obj.iso}</span>` : "ISO-Richtwert: —",
-      obj ? obj.use : "Einsatz: —"
-    ]
+    main:id,
+    items:[obj?`ISO-Richtwert: <span class="mono">${obj.iso}</span>`:"ISO-Richtwert: —", obj?obj.use:"Einsatz: —"]
   });
-
-  addResultCard({
+  addCard({
     title:"ISO 16890 (Richtwert)",
     badge:"Richtwert",
-    main: obj?.iso || "—",
-    items:[
-      "Für EU-Praxis: ISO 16890 im Datenblatt ist maßgeblich (ePM-Werte).",
-      "Bei Bestellung: Druckverlust + Staubspeicherfähigkeit berücksichtigen."
-    ]
+    main:obj?.iso||"—",
+    items:["Für EU-Praxis: ISO 16890 im Datenblatt maßgeblich (ePM-Werte).","Bei Bestellung: Druckverlust + Staubspeicherfähigkeit berücksichtigen."]
   });
 
-  let enHint = "—";
-  const n = Number((id.match(/[0-9]{1,2}/)||[])[0] || 0);
-  if(n>=13 && n<14) enHint = "F7-Bereich (Richtwert)";
-  if(n>=14 && n<15) enHint = "F8-Bereich (Richtwert)";
-  if(n>=15 && n<=16) enHint = "F9-Bereich (Richtwert)";
-  if(n>=9 && n<=12) enHint = "M5/M6-Bereich (Richtwert)";
-  if(n<=8) enHint = "G4-Bereich (Richtwert)";
+  let enHint="—";
+  const n=Number((id.match(/[0-9]{1,2}/)||[])[0]||0);
+  if(n<=8) enHint="G4-Bereich (Richtwert)";
+  if(n>=9 && n<=12) enHint="M5/M6-Bereich (Richtwert)";
+  if(n===13) enHint="F7-Bereich (Richtwert)";
+  if(n===14) enHint="F8-Bereich (Richtwert)";
+  if(n>=15) enHint="F9-Bereich (Richtwert)";
 
-  addResultCard({
+  addCard({
     title:"EN 779 (Bestand, Richtwert)",
     badge:"Richtwert",
-    main: enHint,
-    items:[
-      "EN 779 ist abgekündigt, aber in Bestandsanlagen oft dokumentiert.",
-      "Altbezeichnungen: F5≈M5, F6≈M6."
-    ]
+    main:enHint,
+    items:["EN 779 abgekündigt, aber in Bestandsanlagen dokumentiert.","Altbezeichnungen: F5≈M5, F6≈M6."]
   });
 
   setPrintMeta(`MERV: ${id}`);
 }
 
-/* ===========
-   UI Wiring
-   =========== */
+/* ========= Wiring ========= */
 function refreshMode(){
-  const v = el("stdSelect").value;
-  setVisible("isoBlock", v==="iso16890");
-  setVisible("en779Block", v==="en779");
-  setVisible("en1822Block", v==="en1822");
-  setVisible("mervBlock", v==="merv");
-  setVisible("isoSeg", v==="iso16890");
+  const v=$("stdSelect").value;
+  show("isoBlock", v==="iso16890");
+  show("en779Block", v==="en779");
+  show("en1822Block", v==="en1822");
+  show("mervBlock", v==="merv");
 }
-
-function buildIsoSeg(){
-  const seg = el("isoSeg");
-  seg.innerHTML = "";
-  const presets = [
-    {label:"ePM1 60%", frac:"ePM1", pct:60},
-    {label:"ePM1 80%", frac:"ePM1", pct:80},
-    {label:"Coarse 70%", frac:"Coarse", pct:70},
-    {label:"ePM10 60%", frac:"ePM10", pct:60},
-  ];
-  presets.forEach((p, i)=>{
-    const b = document.createElement("button");
-    b.textContent = p.label;
-    b.onclick = ()=>{
-      el("isoFrac").value = p.frac;
-      el("isoPct").value = p.pct;
-      [...seg.querySelectorAll("button")].forEach(x=>x.classList.remove("active"));
-      b.classList.add("active");
-    };
-    if(i===0) b.classList.add("active");
-    seg.appendChild(b);
-  });
-  seg.style.display = "";
-}
-
 function fillSelects(){
-  el("en779Sel").innerHTML = EN779.map(x=>`<option value="${x.id}">${x.label}</option>`).join("");
-  el("en1822Sel").innerHTML = EN1822.map(x=>`<option value="${x.id}">${x.id}</option>`).join("");
-  el("mervSel").innerHTML = MERV.map(x=>`<option value="${x.id}">${x.id}</option>`).join("");
-  el("presetSel").innerHTML = PRESETS.map(x=>`<option value="${x.id}">${x.name}</option>`).join("");
-  updatePresetHint();
+  $("en779Sel").innerHTML = EN779.map(x=>`<option value="${x.id}">${x.label}</option>`).join("");
+  $("en1822Sel").innerHTML = EN1822.map(x=>`<option value="${x.id}">${x.id}</option>`).join("");
+  $("mervSel").innerHTML = MERV.map(x=>`<option value="${x.id}">${x.id}</option>`).join("");
+  $("presetSel").innerHTML = PRESETS.map(x=>`<option value="${x.id}">${x.name}</option>`).join("");
 }
-
 function updatePresetHint(){
-  const p = PRESETS.find(x=>x.id===el("presetSel").value);
-  el("presetHint").textContent = p ? ("Preset-Hinweise: " + p.notes.join(" ")) : "";
+  const p=PRESETS.find(x=>x.id===$("presetSel").value);
+  $("presetHint").textContent = p ? ("Preset-Hinweise: " + p.notes.join(" ")) : "";
 }
-
 function applyFromUI(){
-  const std = el("stdSelect").value;
-  if(std==="iso16890") renderForISO(el("isoFrac").value, el("isoPct").value);
-  if(std==="en779")    renderForEN779(el("en779Sel").value);
-  if(std==="en1822")   renderForEN1822(el("en1822Sel").value);
-  if(std==="merv")     renderForMERV(el("mervSel").value);
+  const std=$("stdSelect").value;
+  if(std==="iso16890") renderISO($("isoFrac").value, $("isoPct").value);
+  if(std==="en779") renderEN779($("en779Sel").value);
+  if(std==="en1822") renderEN1822($("en1822Sel").value);
+  if(std==="merv") renderMERV($("mervSel").value);
 }
-
 function applyQuick(){
-  const parsed = parseQuickInput(el("quickInput").value);
-  if(!parsed) return false;
-
-  el("stdSelect").value = parsed.std;
-  refreshMode();
-
-  if(parsed.std==="iso16890"){
-    el("isoFrac").value = parsed.iso.frac;
-    el("isoPct").value = parsed.iso.pct;
-    renderForISO(parsed.iso.frac, parsed.iso.pct);
-  }
-  if(parsed.std==="en779"){
-    el("en779Sel").value = parsed.en779.cls;
-    renderForEN779(parsed.en779.cls);
-  }
-  if(parsed.std==="en1822"){
-    el("en1822Sel").value = parsed.en1822.id;
-    renderForEN1822(parsed.en1822.id);
-  }
-  if(parsed.std==="merv"){
-    el("mervSel").value = parsed.merv.id;
-    renderForMERV(parsed.merv.id);
-  }
+  const p=parseQuick($("quickInput").value);
+  if(!p) return false;
+  $("stdSelect").value=p.std; refreshMode();
+  if(p.std==="iso16890"){ $("isoFrac").value=p.iso.frac; $("isoPct").value=p.iso.pct; renderISO(p.iso.frac,p.iso.pct); }
+  if(p.std==="en779"){ $("en779Sel").value=p.en779.cls; renderEN779(p.en779.cls); }
+  if(p.std==="en1822"){ $("en1822Sel").value=p.en1822.id; renderEN1822(p.en1822.id); }
+  if(p.std==="merv"){ $("mervSel").value=p.merv.id; renderMERV(p.merv.id); }
   return true;
 }
-
 function applyPreset(){
-  const p = PRESETS.find(x=>x.id===el("presetSel").value);
+  const p=PRESETS.find(x=>x.id===$("presetSel").value);
   if(!p) return;
-
-  // Set UI based on preset.apply
-  el("stdSelect").value = p.apply.std;
-  refreshMode();
-
-  if(p.apply.std==="iso16890"){
-    el("isoFrac").value = p.apply.iso.frac;
-    el("isoPct").value  = p.apply.iso.pct;
-    renderForISO(p.apply.iso.frac, p.apply.iso.pct, p);
-  }
-  if(p.apply.std==="en779"){
-    el("en779Sel").value = p.apply.en779.cls;
-    renderForEN779(p.apply.en779.cls, p);
-  }
-  if(p.apply.std==="en1822"){
-    el("en1822Sel").value = p.apply.en1822.id;
-    renderForEN1822(p.apply.en1822.id, p);
-  }
-  if(p.apply.std==="merv"){
-    el("mervSel").value = p.apply.merv.id;
-    renderForMERV(p.apply.merv.id, p);
-  }
+  $("stdSelect").value=p.apply.std; refreshMode();
+  if(p.apply.std==="iso16890"){ $("isoFrac").value=p.apply.iso.frac; $("isoPct").value=p.apply.iso.pct; renderISO(p.apply.iso.frac,p.apply.iso.pct,p); }
+  if(p.apply.std==="en779"){ $("en779Sel").value=p.apply.en779.cls; renderEN779(p.apply.en779.cls,p); }
+  if(p.apply.std==="en1822"){ $("en1822Sel").value=p.apply.en1822.id; renderEN1822(p.apply.en1822.id,p); }
+  if(p.apply.std==="merv"){ $("mervSel").value=p.apply.merv.id; renderMERV(p.apply.merv.id,p); }
 }
-
 function resetAll(){
-  el("stdSelect").value = "iso16890";
-  el("quickInput").value = "";
-  el("isoFrac").value = "ePM1";
-  el("isoPct").value = 60;
-  el("en779Sel").value = "F7";
-  el("en1822Sel").value = "H13 (HEPA)";
-  el("mervSel").value = "MERV 13";
-  el("presetSel").value = "office_std";
+  $("stdSelect").value="iso16890";
+  $("quickInput").value="";
+  $("isoFrac").value="ePM1";
+  $("isoPct").value=60;
+  $("en779Sel").value="F7";
+  $("en1822Sel").value="H13 (HEPA)";
+  $("mervSel").value="MERV 13";
+  $("presetSel").value="office_std";
   updatePresetHint();
   refreshMode();
-  renderForISO("ePM1", 60);
+  renderISO("ePM1",60);
 }
 
-function setPrintMeta(text){
-  const d = new Date();
-  const dt = d.toLocaleString("de-DE");
-  el("printMeta").textContent = `${text} • erstellt: ${dt}`;
-}
+$("stdSelect").addEventListener("change", refreshMode);
+$("applyBtn").addEventListener("click", ()=>{ if(!applyQuick()) applyFromUI(); });
+$("resetBtn").addEventListener("click", resetAll);
+$("presetSel").addEventListener("change", updatePresetHint);
+$("presetApplyBtn").addEventListener("click", applyPreset);
+$("printBtn").addEventListener("click", ()=>window.print());
+$("quickInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter"){ e.preventDefault(); if(!applyQuick()) applyFromUI(); }});
 
-// Print button
-el("printBtn").addEventListener("click", ()=> window.print());
-
-/* Init */
 fillSelects();
-buildIsoSeg();
+updatePresetHint();
 refreshMode();
-renderForISO("ePM1", 60);
-
-el("stdSelect").addEventListener("change", ()=>{ refreshMode(); });
-el("applyBtn").addEventListener("click", ()=>{ if(!applyQuick()) applyFromUI(); });
-el("resetBtn").addEventListener("click", resetAll);
-el("presetSel").addEventListener("change", updatePresetHint);
-el("presetApplyBtn").addEventListener("click", applyPreset);
-
-// Enter im Quick-Input
-el("quickInput").addEventListener("keydown", (e)=>{
-  if(e.key==="Enter"){
-    e.preventDefault();
-    if(!applyQuick()) applyFromUI();
-  }
-});
+renderISO("ePM1",60);
 </script>
 </body>
 </html>
